@@ -83,3 +83,10 @@ data. I'm not sure if that's currently a risk factor with SCM, CAT and CLR and i
 it ever becomes one, the best possible solution is to create a user registration
 system and provide API keys to individual users for use with the API consumers
 (this is trivial to implement with django).
+
+
+# API Clients.
+
+- [drf-yasg](https://github.com/axnsan12/drf-yasg) - I am a huge proponent of
+OpenAPI and have used it for over half of a decade. This will allow anyone to
+easily integrate with this project.
