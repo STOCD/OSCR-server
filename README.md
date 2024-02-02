@@ -24,4 +24,4 @@ python3 manage.py runserver
 ```
 
 ## Production
-TBD: Will provide a docker
+TBD: Will provide a docker-compose.yaml
