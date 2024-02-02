@@ -20,7 +20,7 @@ python3 -m pip install /<path_to_OSCR_repo>/.
 python3 -m pip install -r requirements.txt
 
 # Run
-python3 startserver.py
+python3 manage.py runserver
 ```
 
 ## Production
