@@ -50,7 +50,7 @@ fields (e.g.):
     - Map: ISE
     - Handle: @sdkraust
 
-### Scenario 2 (Looking for all my character's results):
+### Scenario 2 (Looking for all my @handle's results):
     - Handle: @sdkraust
 
 ### Scenario 3 (Looking for my exact character's results):
