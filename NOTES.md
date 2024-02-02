@@ -40,8 +40,9 @@ allow at minimum:
 
 Ideally there would be two models here.
     - A ladder model which represents a map/difficulty (e.g. ISE, Solo ISE)
-    - A ladder results model which is a foreign key to a ladder which contains a
-      combat log and its metadata.
+    - A ladder results model which is referenced by a ladder which contains
+      metadata about a specific player, on the ladder, and a reference to the
+      related combatlog data.
 
 Having an individual ladder results model/view allows for querying by various
 fields (e.g.):
