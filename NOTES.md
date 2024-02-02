@@ -85,7 +85,7 @@ system and provide API keys to individual users for use with the API consumers
 (this is trivial to implement with django).
 
 
-# API Clients.
+# API Clients
 
 - [drf-yasg](https://github.com/axnsan12/drf-yasg) - I am a huge proponent of
 OpenAPI and have used it for over half of a decade. This will allow anyone to
