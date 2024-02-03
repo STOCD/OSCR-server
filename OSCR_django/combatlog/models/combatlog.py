@@ -8,6 +8,7 @@ import OSCR
 from core.models import BaseModel
 from django.db import models, transaction
 from django.dispatch import receiver
+from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
 
 from .metadata import Metadata
@@ -19,6 +20,7 @@ def get_dict(player):
     """This is a hack because a player is not json serialziable."""
     return {
         "name": player.name,
+        "is_player": player.isPlayer,
         "total_damage": player.totaldamage,
         "total_attacks": player.totalAttacks,
         "total_hull_damage": player.hulllDamage,
@@ -58,7 +60,7 @@ def get_dict(player):
 
 
 class CombatLog(BaseModel):
-    """Combat Log Model"""
+    """CombatLog Model"""
 
     file = models.FileField(upload_to="uploads")
 
@@ -79,6 +81,55 @@ class CombatLog(BaseModel):
         parser = OSCR.parser()
         parser.readCombatShallow(self.file.path)
         summary = [get_dict(player) for player in parser.tableArray]
+
+        # Check to see if map / difficulty combination exists in the ladder
+        # table. if it does, iterate over each player to see if they have a
+        # higher key. If any of them do, allow uploading of the log and
+        # add/update players into the league table.
+
+        try:
+            ladder = Ladder.objects.get(
+                internal_name=parser.map,
+                internal_difficulty=parser.difficulty,
+            )
+        except Ladder.DoesNotExist:
+            raise APIException("{parser.map} (parser.difficulty} is not a valid ladder")
+
+        added = False
+        for player in summary:
+            if not player["is_player"]:
+                continue
+
+            queryset = LadderEntry.objects.filter(
+                ladder__internal_name=parser.map,
+                ladder__internal_difficulty=parser.difficulty,
+                player=player["name"],
+            )
+            if queryset.count() == 0:
+                LOGGER.info(
+                    f"New Entry: {player['name']}: {parser.map} ({parser.difficulty}) - {player['dps']} DPS"
+                )
+                LadderEntry.objects.create(
+                    player=player["name"],
+                    data=player,
+                    combatlog=self,
+                    ladder=ladder,
+                )
+                added = True
+            elif queryset.filter(data__dps__gt=player["dps"]):
+                LOGGER.info(
+                    f"Updated Entry: {player['name']}: {parser.map} ({parser.difficulty}) - {player['dps']} DPS"
+                )
+                LadderEntry.objects.update(
+                    player=player["name"],
+                    data=player,
+                    combatlog=self,
+                    ladder=ladder,
+                )
+                added = True
+
+        if not added:
+            raise APIException("No entries were updated")
 
         with transaction.atomic():
             if self.metadata is None:

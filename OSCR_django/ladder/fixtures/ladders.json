@@ -1,0 +1,32 @@
+[
+    {
+        "model": "ladder.Ladder",
+        "pk": 1,
+        "fields": {
+            "name": "Infected: The Conduit",
+            "difficulty": "Elite",
+            "internal_name": "Infected_Space",
+            "internal_difficulty": "Elite"
+        }
+    },
+    {
+        "model": "ladder.Ladder",
+        "pk": 2,
+        "fields": {
+            "name": "Infected: The Conduit",
+            "difficulty": "Advanced",
+            "internal_name": "Infected_Space",
+            "internal_difficulty": "Advanced"
+        }
+    },
+    {
+        "model": "ladder.Ladder",
+        "pk": 3,
+        "fields": {
+            "name": "Hive: Onslaught",
+            "difficulty": "Elite",
+            "internal_name": "Hive_Space",
+            "internal_difficulty": "Elite"
+        }
+    }
+]

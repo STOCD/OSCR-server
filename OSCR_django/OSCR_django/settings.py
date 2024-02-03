@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_yasg",
+    "django_filters",
     # Our apps below here
     "user.apps.UserConfig",
     "combatlog.apps.CombatLogConfig",
+    "ladder.apps.LadderConfig",
 ]
 
 MIDDLEWARE = [

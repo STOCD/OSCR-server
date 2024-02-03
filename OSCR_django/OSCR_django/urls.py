@@ -33,4 +33,6 @@ urlpatterns = [
     path("swagger/", schema_view.with_ui("swagger")),
     # path("", include("user.urls")),
     path("", include("combatlog.urls.combatlog")),
+    path("", include("ladder.urls.ladder")),
+    path("", include("ladder.urls.ladder_entry")),
 ]
