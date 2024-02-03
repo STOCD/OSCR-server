@@ -87,46 +87,50 @@ class CombatLog(BaseModel):
         # higher key. If any of them do, allow uploading of the log and
         # add/update players into the league table.
 
-        try:
-            ladder = Ladder.objects.get(
-                internal_name=parser.map,
-                internal_difficulty=parser.difficulty,
+        ladders = Ladder.objects.filter(
+            internal_name=parser.map,
+            internal_difficulty=parser.difficulty,
+        )
+
+        if ladders.count() == 0:
+            raise APIException(
+                f"{parser.map} {parser.difficulty} is not a valid ladder"
             )
-        except Ladder.DoesNotExist:
-            raise APIException("{parser.map} (parser.difficulty} is not a valid ladder")
 
         added = False
         for player in summary:
             if not player["is_player"]:
                 continue
 
-            queryset = LadderEntry.objects.filter(
-                ladder__internal_name=parser.map,
-                ladder__internal_difficulty=parser.difficulty,
-                player=player["name"],
-            )
-            if queryset.count() == 0:
-                LOGGER.info(
-                    f"New Entry: {player['name']}: {parser.map} ({parser.difficulty}) - {player['dps']} DPS"
-                )
-                LadderEntry.objects.create(
-                    player=player["name"],
-                    data=player,
-                    combatlog=self,
+            for ladder in ladders:
+                queryset = LadderEntry.objects.filter(
                     ladder=ladder,
-                )
-                added = True
-            elif queryset.filter(data__dps__gt=player["dps"]):
-                LOGGER.info(
-                    f"Updated Entry: {player['name']}: {parser.map} ({parser.difficulty}) - {player['dps']} DPS"
-                )
-                queryset.update(
                     player=player["name"],
-                    data=player,
-                    combatlog=self,
-                    ladder=ladder,
                 )
-                added = True
+                if queryset.count() == 0:
+                    LOGGER.info(
+                        f"New Entry: {player['name']}: {parser.map} ({parser.difficulty}) - {player['dps']} DPS"
+                    )
+                    LadderEntry.objects.create(
+                        player=player["name"],
+                        data=player,
+                        combatlog=self,
+                        ladder=ladder,
+                    )
+                    added = True
+                elif queryset.filter(
+                    **{f"data__{ladder.metric}__gt": player[ladder.metric]}
+                ):
+                    LOGGER.info(
+                        f"Updated Entry: {player['name']}: {parser.map} ({parser.difficulty}) - {player['dps']} DPS"
+                    )
+                    queryset.update(
+                        player=player["name"],
+                        data=player,
+                        combatlog=self,
+                        ladder=ladder,
+                    )
+                    added = True
 
         if not added:
             raise APIException("No entries were updated")
@@ -155,7 +159,8 @@ def combat_log_post_delete(sender, instance, **kwargs):
     Automatically Delete CombatLog file on model deletion.
     """
 
-    instance.metadata.delete()
+    if instance.metadata:
+        instance.metadata.delete()
     instance.delete_file()
 
 

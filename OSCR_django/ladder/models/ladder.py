@@ -9,9 +9,10 @@ class Ladder(BaseModel):
 
     name = models.TextField()
     difficulty = models.TextField()
+    metric = models.TextField()
 
     internal_name = models.TextField()
     internal_difficulty = models.TextField()
 
     def __str__(self):
-        return f"{self.name} ({self.difficulty})"
+        return f"{self.metric} | {self.name} ({self.difficulty})"
