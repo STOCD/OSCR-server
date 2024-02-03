@@ -166,3 +166,4 @@ migrations
 # Generating the OpenAPI file and client
 api-spec.yaml
 client
+OSCR_django/uploads
