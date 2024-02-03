@@ -163,5 +163,6 @@ cython_debug/
 # Migrations are intentionally not included right now.
 migrations
 
-# Generating the OpenAPI file
+# Generating the OpenAPI file and client
 api-spec.yaml
+client
