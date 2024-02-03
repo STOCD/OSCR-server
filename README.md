@@ -32,7 +32,6 @@ TBD: Will provide a docker-compose.yaml
 # Generating the API Spec
 ```
 python3 OSCR-django/manage.py generate_swagger -f yaml -u http://127.0.0.1 api-spec.yaml
-
 ```
 
 # Creating an API Client
