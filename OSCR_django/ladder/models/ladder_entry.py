@@ -17,3 +17,14 @@ class LadderEntry(BaseModel):
 
     def __str__(self):
         return f"{self.player} | {self.ladder.name} ({self.ladder.difficulty}) - {self.data['dps']:,.0f} DPS"
+
+    @classmethod
+    def ordering_fields(cls):
+        base_fields = ["player", "ladder__name", "ladder__difficulty"]
+        data_fields = []
+        """Custom Method to get Ordering Fields"""
+        if LadderEntry.objects.count():
+            for k, _ in LadderEntry.objects.first().data.items():
+                data_fields.append(f"data__{k}")
+
+        return base_fields + data_fields

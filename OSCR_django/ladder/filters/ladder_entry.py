@@ -1,9 +1,14 @@
 """ LadderEntry Filter """
 
+import decimal
+import logging
+
+import django_filters.rest_framework as filters
 from core.filters import BaseFilterSet
 from django.db.models import JSONField
-from django_filters.rest_framework import CharFilter
 from ladder.models import LadderEntry
+
+LOGGER = logging.getLogger("django")
 
 
 class LadderEntryFilter(BaseFilterSet):
@@ -13,9 +18,50 @@ class LadderEntryFilter(BaseFilterSet):
         """Meta class for the application filter"""
 
         model = LadderEntry
-        fields = "__all__"
+        fields = [
+            "player",
+            "ladder",
+            "ladder__name",
+            "ladder__difficulty",
+        ]
         filter_overrides = {
             JSONField: {
-                "filter_class": CharFilter,
+                "filter_class": filters.CharFilter,
             },
         }
+
+    def filter_json_field_value(self, queryset, name, value):
+        if type(value) in [decimal.Decimal]:
+            value = float(value)
+        return queryset.filter(**{name: value})
+
+    def __init__(self, *args, **kwargs):
+        """Custom init to populate filters"""
+        super().__init__(*args, **kwargs)
+
+        if self.queryset.exists():
+            for k, v in self.queryset.first().data.items():
+                if type(v) in [float, int]:
+                    for expr in ["lt", "gt", "lte", "gte"]:
+                        self.base_filters[f"data__{k}__{expr}"] = filters.NumberFilter(
+                            field_name=f"data__{k}__{expr}",
+                            label=f"data__{k}__{expr}",
+                            method="filter_json_field_value",
+                        )
+                    self.base_filters[f"data__{k}"] = filters.NumberFilter(
+                        field_name=f"data__{k}",
+                        label=f"data__{k}",
+                        method="filter_json_field_value",
+                    )
+                elif type(v) in [bool]:
+                    self.base_filters[f"data__{k}"] = filters.BooleanFilter(
+                        field_name=f"data__{k}",
+                        label=f"data__{k}",
+                        method="filter_json_field_value",
+                    )
+                else:
+                    self.base_filters[f"data__{k}"] = filters.CharFilter(
+                        field_name=f"data__{k}",
+                        label=f"data__{k}",
+                        method="filter_json_field_value",
+                    )

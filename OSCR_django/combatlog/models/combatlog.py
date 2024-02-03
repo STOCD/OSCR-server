@@ -120,7 +120,7 @@ class CombatLog(BaseModel):
                 LOGGER.info(
                     f"Updated Entry: {player['name']}: {parser.map} ({parser.difficulty}) - {player['dps']} DPS"
                 )
-                LadderEntry.objects.update(
+                queryset.update(
                     player=player["name"],
                     data=player,
                     combatlog=self,
@@ -155,6 +155,7 @@ def combat_log_post_delete(sender, instance, **kwargs):
     Automatically Delete CombatLog file on model deletion.
     """
 
+    instance.metadata.delete()
     instance.delete_file()
 
 

@@ -1,14 +1,15 @@
 """ Base Filter """
 
-from django_filters.rest_framework import DjangoFilterBackend, FilterSet
+import logging
+
+import django_filters.rest_framework as filters
+
+LOGGER = logging.getLogger("django")
 
 
-class BaseFilterSet(FilterSet):
+class BaseFilterSet(filters.FilterSet):
     """Base FilterSet"""
 
 
-class BaseFilterBackend(DjangoFilterBackend):
+class BaseFilterBackend(filters.DjangoFilterBackend):
     """Base Filter Backend"""
-
-    def filter_json_field_value(self, queryset, name, value):
-        return queryset.filter(**{name: value})
