@@ -17,8 +17,20 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from drf_yasg.views import get_schema_view
+
+from .openapi import openapi_info
+
+schema_view = get_schema_view(
+    openapi_info,
+    public=True,
+    permission_classes=(),
+)
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("swagger/", schema_view.with_ui("swagger")),
     # path("", include("user.urls")),
+    path("", include("combatlog.urls.combatlog")),
 ]

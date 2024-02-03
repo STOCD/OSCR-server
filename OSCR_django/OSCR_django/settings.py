@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "drf_yasg",
     # Our apps below here
     "user.apps.UserConfig",
+    "combatlog.apps.CombatLogConfig",
 ]
 
 MIDDLEWARE = [
@@ -130,3 +132,26 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Override the default user model.
 AUTH_USER_MODEL = "user.User"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "plain_message": {"format": "%(message)s"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "plain_message"},
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
+
+# OpenAPI Genration with drf_yasg
+SWAGGER_SETTINGS = {
+    "DEFAULT_INFO": "OSCR_django.openapi.openapi_info",
+}
