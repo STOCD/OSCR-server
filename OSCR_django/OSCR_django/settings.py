@@ -26,9 +26,9 @@ if SECRET_KEY is None:
     SECRET_KEY = "django-insecure-mnumfvlz&o#5u@f^*nr6-qat)y0*y!k!0h_6l%^0541mql3akr"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -83,10 +83,17 @@ WSGI_APPLICATION = "OSCR_django.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+data_dir = os.environ.get("DATA_DIR")
+if data_dir is None:
+    db = BASE_DIR / "data_dir.sqlite3"
+else:
+    db = os.path.join(data_dir, "data_dir.sqlite3")
+    STATIC_ROOT = os.path.join(data_dir, "static")
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": db,
     }
 }
 
@@ -156,4 +163,9 @@ LOGGING = {
 # OpenAPI Genration with drf_yasg
 SWAGGER_SETTINGS = {
     "DEFAULT_INFO": "OSCR_django.openapi.openapi_info",
+}
+
+# DRF settings
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",)
 }

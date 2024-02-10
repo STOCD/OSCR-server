@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oscr-server
+    hostname: oscr-server
+    restart: always
+    command: /opt/docker/entrypoint.sh
+    env_file: .env-server
+    volumes:
+      - ./:/opt/:ro
+      - ./data:/opt/data/:rw
+    working_dir: /opt/OSCR_django
+    expose:
+      - "8000"
+  nginx:
+    image: nginx:alpine
+    restart: always
+    container_name: oscr-proxy
+    hostname: oscr-proxy
+    volumes:
+      - ./data/static:/opt/data/static:ro
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    links:
+        - server
+    ports:
+      - "8080:80"
+    depends_on:
+        - server
