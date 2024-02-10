@@ -1,7 +1,7 @@
 # OSCR-server
 django backend for OSCR
 
-OSCR-django is a backend for [OSCR](https://github.com/STOCD/OSCR/tree/main) with the intent
+OSCR-server is a backend for [OSCR](https://github.com/STOCD/OSCR/tree/main) with the intent
 of recording combat log data.
 
 # Requirements
@@ -35,5 +35,5 @@ python3 OSCR-django/manage.py generate_swagger -f yaml -u http://127.0.0.1 api-s
 [Use openapi-generator-cli](https://github.com/OpenAPITools/openapi-generator-cli)
 ```
 openapi-generator-cli generate -g python -o client -i api-spec.yaml \
-    --additional-properties=packageName=OSCR_django_client
+    --additional-properties=packageName=OSCR_django_client,packageVersion=1.0.0
 ```
