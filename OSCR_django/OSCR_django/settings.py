@@ -89,6 +89,7 @@ if data_dir is None:
 else:
     db = os.path.join(data_dir, "data_dir.sqlite3")
     STATIC_ROOT = os.path.join(data_dir, "static")
+    MEDIA_ROOT = os.path.join(data_dir, "media")
 
 DATABASES = {
     "default": {
