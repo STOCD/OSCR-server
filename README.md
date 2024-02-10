@@ -9,18 +9,7 @@ see requirements.txt
 
 # Running
 ## Development
-```bash
-python3 -m venv ~/OSCR
-source ~/OSCR/bin/activate
-
-# Install Requirements
-python3 -m pip install -r requirements.txt
-
-# Run
-python3 OSCR-django/manage.py makemigrations user combatlog ladder
-python3 OSCR-django/manage.py migrate
-python3 OSCR-django/manage.py runserver
-```
+It's easiest to use the production steps below.
 
 ## Production
 ```bash
