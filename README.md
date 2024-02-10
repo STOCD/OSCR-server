@@ -1,4 +1,4 @@
-# OSCR-django
+# OSCR-server
 django backend for OSCR
 
 OSCR-django is a backend for [OSCR](https://github.com/STOCD/OSCR/tree/main) with the intent
@@ -12,9 +12,6 @@ see requirements.txt
 ```bash
 python3 -m venv ~/OSCR
 source ~/OSCR/bin/activate
-
-# Install OSCR
-python3 -m pip install /<path_to_OSCR_repo>/.
 
 # Install Requirements
 python3 -m pip install -r requirements.txt
