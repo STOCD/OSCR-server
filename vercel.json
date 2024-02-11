@@ -1,0 +1,12 @@
+{
+    "builds": [{
+        "src": "OSCR_django/OSCR_django/wsgi.py",
+        "use": "@vercel/python"
+    }],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "OSCR_django/OSCR_django/wsgi.py"
+        }
+    ]
+}
