@@ -165,6 +165,7 @@ STORAGES = {
 
 # OpenAPI Genration with drf_yasg
 SWAGGER_SETTINGS = {
+    "USE_SESSION_AUTH": False,
     "DEFAULT_INFO": "OSCR_django.openapi.openapi_info",
 }
 
