@@ -83,18 +83,13 @@ WSGI_APPLICATION = "OSCR_django.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-data_dir = os.environ.get("DATA_DIR")
-if data_dir is None:
-    db = BASE_DIR / "data_dir.sqlite3"
-else:
-    db = os.path.join(data_dir, "data_dir.sqlite3")
-    STATIC_ROOT = os.path.join(data_dir, "static")
-    MEDIA_ROOT = os.path.join(data_dir, "media")
+STATIC_ROOT = BASE_DIR / "static"
+MEDIA_ROOT = BASE_DIR / "media"
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": db,
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
