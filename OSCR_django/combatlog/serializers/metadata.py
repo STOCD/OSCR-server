@@ -9,9 +9,4 @@ class MetadataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Metadata
-        exclude = [
-            "dps_chart",
-            "damage_chart",
-            "npc_dps_chart",
-            "npc_damage_chart",
-        ]
+        exclude = []
