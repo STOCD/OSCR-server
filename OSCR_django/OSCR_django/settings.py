@@ -27,6 +27,9 @@ if SECRET_KEY is None:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+ENABLE_DEBUG = os.environ.get("ENABLE_DEBUG", None)
+if ENABLE_DEBUG:
+    DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -168,7 +171,7 @@ STORAGES = {
 
 # OpenAPI Genration with drf_yasg
 SWAGGER_SETTINGS = {
-    "USE_SESSION_AUTH": False,
+    "USE_SESSION_AUTH": DEBUG,
     "DEFAULT_INFO": "OSCR_django.openapi.openapi_info",
 }
 

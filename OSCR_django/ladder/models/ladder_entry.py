@@ -16,7 +16,7 @@ class LadderEntry(BaseModel):
     ladder = models.ForeignKey(Ladder, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.player} | {self.ladder.name} ({self.ladder.difficulty}) - {self.data['dps']:,.0f} DPS"
+        return f"{self.player} | {self.ladder.name} ({self.ladder.difficulty}) - {self.data['DPS']:,.0f} DPS"
 
     @classmethod
     def ordering_fields(cls):
