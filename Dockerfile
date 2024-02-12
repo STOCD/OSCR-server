@@ -8,4 +8,10 @@ RUN python3 -m pip install -r /tmp/requirements.txt
 
 RUN rm -rf /tmp/*
 
-WORKDIR /opt
+COPY OSCR_django /opt/OSCR_django/
+COPY docker/entrypoint.sh /opt/
+
+WORKDIR /opt/OSCR_django/
+
+EXPOSE 8000
+ENTRYPOINT /opt/entrypoint.sh

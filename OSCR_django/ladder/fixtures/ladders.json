@@ -5,7 +5,7 @@
         "fields": {
             "name": "Infected: The Conduit",
             "difficulty": "Elite",
-            "metric": "dps",
+            "metric": "DPS",
             "internal_name": "Infected_Space",
             "internal_difficulty": "Elite"
         }
@@ -16,7 +16,7 @@
         "fields": {
             "name": "Infected: The Conduit",
             "difficulty": "Advanced",
-            "metric": "dps",
+            "metric": "DPS",
             "internal_name": "Infected_Space",
             "internal_difficulty": "Advanced"
         }
@@ -27,8 +27,41 @@
         "fields": {
             "name": "Hive: Onslaught",
             "difficulty": "Elite",
-            "metric": "dps",
+            "metric": "DPS",
             "internal_name": "Hive_Space",
+            "internal_difficulty": "Elite"
+        }
+    },
+    {
+        "model": "ladder.Ladder",
+        "pk": 4,
+        "fields": {
+            "name": "Hive: Onslaught",
+            "difficulty": "Advanced",
+            "metric": "DPS",
+            "internal_name": "Hive_Space",
+            "internal_difficulty": "Advanced"
+        }
+    },
+    {
+        "model": "ladder.Ladder",
+        "pk": 5,
+        "fields": {
+            "name": "Bug Hunt",
+            "difficulty": "Elite",
+            "metric": "DPS",
+            "internal_name": "Bug_Hunt",
+            "internal_difficulty": "Elite"
+        }
+    },
+    {
+        "model": "ladder.Ladder",
+        "pk": 6,
+        "fields": {
+            "name": "Miner Instabilities",
+            "difficulty": "Elite",
+            "metric": "DPS",
+            "internal_name": "Miner_Instabilities",
             "internal_difficulty": "Elite"
         }
     }

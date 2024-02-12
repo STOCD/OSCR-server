@@ -27,6 +27,9 @@ if SECRET_KEY is None:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+ENABLE_DEBUG = os.environ.get("ENABLE_DEBUG", None)
+if ENABLE_DEBUG:
+    DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -51,6 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -83,18 +87,13 @@ WSGI_APPLICATION = "OSCR_django.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-data_dir = os.environ.get("DATA_DIR")
-if data_dir is None:
-    db = BASE_DIR / "data_dir.sqlite3"
-else:
-    db = os.path.join(data_dir, "data_dir.sqlite3")
-    STATIC_ROOT = os.path.join(data_dir, "static")
-    MEDIA_ROOT = os.path.join(data_dir, "media")
+STATIC_ROOT = BASE_DIR / "staticfiles"
+MEDIA_ROOT = BASE_DIR / "media"
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": db,
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -161,8 +160,18 @@ LOGGING = {
     },
 }
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 # OpenAPI Genration with drf_yasg
 SWAGGER_SETTINGS = {
+    "USE_SESSION_AUTH": DEBUG,
     "DEFAULT_INFO": "OSCR_django.openapi.openapi_info",
 }
 
@@ -170,3 +179,7 @@ SWAGGER_SETTINGS = {
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",)
 }
+
+# For proxy forwarding.
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
