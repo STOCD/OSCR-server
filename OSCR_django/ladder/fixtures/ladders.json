@@ -6,7 +6,7 @@
             "name": "Infected: The Conduit",
             "difficulty": "Elite",
             "metric": "DPS",
-            "internal_name": "Infected_Space",
+            "internal_name": "Infected Space",
             "internal_difficulty": "Elite"
         }
     },
@@ -17,7 +17,7 @@
             "name": "Infected: The Conduit",
             "difficulty": "Advanced",
             "metric": "DPS",
-            "internal_name": "Infected_Space",
+            "internal_name": "Infected Space",
             "internal_difficulty": "Advanced"
         }
     },
@@ -28,7 +28,7 @@
             "name": "Hive: Onslaught",
             "difficulty": "Elite",
             "metric": "DPS",
-            "internal_name": "Hive_Space",
+            "internal_name": "Hive Space",
             "internal_difficulty": "Elite"
         }
     },
@@ -39,7 +39,7 @@
             "name": "Hive: Onslaught",
             "difficulty": "Advanced",
             "metric": "DPS",
-            "internal_name": "Hive_Space",
+            "internal_name": "Hive Space",
             "internal_difficulty": "Advanced"
         }
     },
@@ -50,7 +50,7 @@
             "name": "Bug Hunt",
             "difficulty": "Elite",
             "metric": "DPS",
-            "internal_name": "Bug_Hunt",
+            "internal_name": "Bug Hunt",
             "internal_difficulty": "Elite"
         }
     },
@@ -61,7 +61,7 @@
             "name": "Miner Instabilities",
             "difficulty": "Elite",
             "metric": "DPS",
-            "internal_name": "Miner_Instabilities",
+            "internal_name": "Miner Instabilities",
             "internal_difficulty": "Elite"
         }
     }
