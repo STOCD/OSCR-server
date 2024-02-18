@@ -9,25 +9,39 @@ see requirements.txt
 
 # Running
 ## Development
-It's easiest to use the production steps below.
+```bash
+python3 manage.py migrate
+ENABLE_DEBUG=y python3 manage.py runserver
+```
 
 ## Production
-```bash
-# Start up the server + proxy (add -d start up as a daemon)
-docker compose up
 
-# Create the superuser:
-docker exec -it oscr-server python3 manage.py createsuperuser
+This Project should be deployable to cloud docker providers, however OSCR-server
+is not currently production ready and needs to address its DB backend first.
+
+- Currently we use the default sqlite provider which is not acceptable in cloud
+deployments. In the future we will move to postgres.
+
+# Create the superuser (for django admin):
+
+```bash
+python3 manage.py createsuperuser
 ```
 
 # Generating the API Spec
-```
+
+API Specs are packaged along with our releases.
+
+
+```bash
 python3 OSCR-django/manage.py generate_swagger -f yaml -u http://127.0.0.1 api-spec.yaml
 ```
 
 # Creating an API Client
+
 [Use openapi-generator-cli](https://github.com/OpenAPITools/openapi-generator-cli)
-```
+
+```bash
 openapi-generator-cli generate -g python -o client -i api-spec.yaml \
     --additional-properties=packageName=OSCR_django_client,packageVersion=1.0.0
 cd client && python3 -m twine upload dist/*
