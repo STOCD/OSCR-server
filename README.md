@@ -24,6 +24,8 @@ is not currently production ready and needs to address its DB backend first.
 - Currently we use the default sqlite provider which is not acceptable in cloud
 deployments. In the future we will move to postgres.
 
+- Logs may also be stored in DB instead of on the local FS.
+
 # Create the superuser (for django admin):
 
 ```bash
