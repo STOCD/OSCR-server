@@ -2,5 +2,5 @@ Django==4.2.9
 djangorestframework==3.14.0
 drf_yasg==1.21.7
 django_filter==23.5
-STO-OSCR==2024.2b170
+STO-OSCR==2024.2b180
 whitenoise==6.6.0
