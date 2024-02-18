@@ -77,8 +77,15 @@ class CombatLog(BaseModel):
                         ladder=ladder,
                     )
                     added = True
-                elif queryset.filter(
-                    **{f"data__{ladder.metric}__gt": getattr(player, ladder.metric)}
+                elif (
+                    queryset.filter(
+                        **{
+                            f"data__{ladder.metric}__gt": getattr(
+                                player, f"{ladder.metric}"
+                            )
+                        }
+                    ).count()
+                    == 0
                 ):
                     LOGGER.info(
                         f"Updated Entry: {full_name}: {combat.map} ({combat.difficulty}) - {player.DPS} DPS"
