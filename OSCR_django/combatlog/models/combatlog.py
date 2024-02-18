@@ -80,7 +80,7 @@ class CombatLog(BaseModel):
                 elif (
                     queryset.filter(
                         **{
-                            f"data__{ladder.metric}__gt": getattr(
+                            f"data__{ladder.metric}__gte": getattr(
                                 player, f"{ladder.metric}"
                             )
                         }
