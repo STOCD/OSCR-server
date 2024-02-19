@@ -38,7 +38,18 @@ class CombatLog(BaseModel):
         # Only look at the first combat for now.
         parser.shallow_combat_analysis(0)
         combat = parser.active_combat
-        summary = parser.active_combat.player_dict
+        summary = sorted(
+            parser.active_combat.player_dict.items(),
+            reverse=True,
+            key=lambda player: player[1].combat_time,
+        )
+
+        if len(summary) == 0:
+            raise APIException("Combat log is empty")
+
+        # Grab the highest combat_time. This is used to validate other players.
+        # Player combat_time should be within 95% of the highest time.
+        combat_time = summary[0][1].combat_time * 0.95
 
         # Check to see if map / difficulty combination exists in the ladder
         # table. if it does, iterate over each player to see if they have a
@@ -55,7 +66,17 @@ class CombatLog(BaseModel):
                 f"{combat.map} {combat.difficulty} is not a valid ladder"
             )
 
-        for full_name, player in summary.items():
+        for full_name, player in summary:
+            if player.combat_time < combat_time:
+                results.append(
+                    {
+                        "name": full_name,
+                        "updated": False,
+                        "detail": f"{full_name}'s combat time was too low.",
+                    }
+                )
+                continue
+
             for ladder in ladders:
                 queryset = LadderEntry.objects.filter(
                     ladder=ladder,
