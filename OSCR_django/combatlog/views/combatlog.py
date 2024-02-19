@@ -3,8 +3,16 @@
 import logging
 
 from combatlog.models import CombatLog
-from combatlog.serializers import CombatLogSerializer, CombatLogUploadSerializer
+from combatlog.serializers import (
+    CombatLogSerializer,
+    CombatLogUploadResponseSerializer,
+    CombatLogUploadSerializer,
+)
 from core.pagination import PageNumberPagination
+from django.db import transaction
+from django.http import HttpResponse
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
@@ -25,6 +33,9 @@ class CombatLogViewSet(
     serializer_class = CombatLogSerializer
     pagination_class = PageNumberPagination
 
+    @swagger_auto_schema(
+        responses={200: CombatLogUploadResponseSerializer(many=True)},
+    )
     @action(
         detail=False,
         methods=["POST"],
@@ -42,6 +53,39 @@ class CombatLogViewSet(
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        CombatLog.objects.create(file=serializer.validated_data["file"])
+        data = serializer.validated_data["file"].read()
 
-        return Response(status=200)
+        with transaction.atomic():
+            instance = CombatLog.objects.create(data=data)
+            res = instance.update_metadata()
+            serializer = CombatLogUploadResponseSerializer(data=res, many=True)
+            serializer.is_valid(raise_exception=True)
+
+        return Response(serializer.data)
+
+    @swagger_auto_schema(
+        responses={
+            "200": openapi.Response(
+                "File Attachment", schema=openapi.Schema(type=openapi.TYPE_FILE)
+            )
+        },
+    )
+    @action(
+        detail=True,
+        methods=["GET"],
+        permission_classes=(),
+    )
+    def download(self, request, pk=None):
+        """
+        Combat Log Download
+
+        Download the saved Combat Log
+        """
+
+        instance = self.get_object()
+
+        response = HttpResponse()
+        response["Content-Disposition"] = f'attachment; filename="{instance}.log"'
+        response["Content-Transfer-Encoding"] = "binary"
+        response.write(instance.data)
+        return response
