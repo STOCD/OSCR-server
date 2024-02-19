@@ -109,6 +109,9 @@ class CombatLog(BaseModel):
                 self.metadata.save()
             self.save()
 
+        # Delete any combat logs that do not have ladder entries
+        CombatLog.objects.filter(ladderentry=None).delete()
+
         return results
 
     def update_metadata(self):
