@@ -10,6 +10,7 @@ class Metadata(BaseModel):
     map = models.TextField()
     difficulty = models.TextField()
     summary = models.JSONField()
+    date_time = models.DateTimeField(null=True, default=None)
 
     def __str__(self):
-        return f"{self.map} ({self.difficulty})"
+        return f"{self.date_time} {self.map} ({self.difficulty})"

@@ -7,6 +7,7 @@ import OSCR
 from core.models import BaseModel
 from django.db import models, transaction
 from django.dispatch import receiver
+from django.utils import timezone
 from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
 
@@ -104,6 +105,7 @@ class CombatLog(BaseModel):
                 self.metadata = Metadata(
                     map=combat.map,
                     difficulty=combat.difficulty,
+                    date_time=timezone.make_aware(combat.date_time),
                     summary=summary,
                 )
                 self.metadata.save()
