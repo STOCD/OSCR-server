@@ -18,9 +18,9 @@ jobs:
         python-version: "3.10"
 
     - run: pip install -r requirements.txt
-    - run: python3 OSCR_django/manage.py migrate
+    - run: ENABLE_DEBUG=yes python3 OSCR_django/manage.py migrate
     - run: mkdir -p dist
-    - run: python3 OSCR_django/manage.py generate_swagger -f yaml -u http://127.0.0.1 dist/OSCR_django.yaml
+    - run: ENABLE_DEBUG=yes python3 OSCR_django/manage.py generate_swagger -f yaml -u http://127.0.0.1 dist/OSCR_django.yaml
     - uses: actions/upload-artifact@v2
       with:
         name: build_binary
