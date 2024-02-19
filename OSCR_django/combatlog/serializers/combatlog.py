@@ -14,7 +14,7 @@ class CombatLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = CombatLog
         exclude = [
-            "file",
+            "data",
         ]
 
 
@@ -22,3 +22,11 @@ class CombatLogUploadSerializer(serializers.Serializer):
     """CombatLog Upload Serializer"""
 
     file = serializers.FileField()
+
+
+class CombatLogUploadResponseSerializer(serializers.Serializer):
+    """CombatLog Upload Response Serializer"""
+
+    name = serializers.CharField()
+    updated = serializers.BooleanField()
+    detail = serializers.CharField()

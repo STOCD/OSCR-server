@@ -15,4 +15,4 @@ class Ladder(BaseModel):
     internal_difficulty = models.TextField()
 
     def __str__(self):
-        return f"{self.metric} | {self.name} ({self.difficulty})"
+        return f"{self.name} ({self.difficulty}) - {self.metric}"

@@ -1,16 +1,14 @@
 """ CombatLog Models """
 
 import logging
-import os
-import traceback
+import tempfile
 
+import OSCR
 from core.models import BaseModel
 from django.db import models, transaction
 from django.dispatch import receiver
 from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
-
-import OSCR
 
 from .metadata import Metadata
 
@@ -20,7 +18,7 @@ LOGGER = logging.getLogger("django")
 class CombatLog(BaseModel):
     """CombatLog Model"""
 
-    file = models.FileField(upload_to="uploads")
+    data = models.BinaryField(null=True, default=None)
 
     metadata = models.ForeignKey(
         Metadata,
@@ -28,15 +26,12 @@ class CombatLog(BaseModel):
         null=True,
     )
 
-    def delete_file(self):
-        """Delete the uploaded combat log"""
-        if self.file:
-            if os.path.exists(self.file.path):
-                os.remove(self.file.path)
+    def update_metadata_file(self, file):
+        """Update Metadata from a file"""
 
-    def update_metadata(self):
-        """Parse the Combat Log and create Metadata"""
-        parser = OSCR.OSCR(self.file.path)
+        results = []
+
+        parser = OSCR.OSCR(file.name)
         parser.analyze_log_file()
 
         # Only look at the first combat for now.
@@ -59,7 +54,6 @@ class CombatLog(BaseModel):
                 f"{combat.map} {combat.difficulty} is not a valid ladder"
             )
 
-        added = False
         for full_name, player in summary.items():
             for ladder in ladders:
                 queryset = LadderEntry.objects.filter(
@@ -67,32 +61,43 @@ class CombatLog(BaseModel):
                     player=full_name,
                 )
                 if queryset.count() == 0:
-                    LOGGER.info(
-                        f"New Entry: {full_name}: {combat.map} ({combat.difficulty}) - {player.DPS} DPS"
-                    )
+                    result = {
+                        "name": full_name,
+                        "updated": True,
+                        "detail": f"New entry for {full_name} on {ladder}",
+                    }
                     LadderEntry.objects.create(
                         player=full_name,
                         data=player._asdict(),
                         combatlog=self,
                         ladder=ladder,
                     )
-                    added = True
-                elif queryset.filter(
-                    **{f"data__{ladder.metric}__gt": getattr(player, ladder.metric)}
-                ):
-                    LOGGER.info(
-                        f"Updated Entry: {full_name}: {combat.map} ({combat.difficulty}) - {player.DPS} DPS"
-                    )
+                elif not queryset.filter(
+                    **{
+                        f"data__{ladder.metric}__gte": getattr(
+                            player, f"{ladder.metric}"
+                        )
+                    }
+                ).count():
+                    result = {
+                        "name": full_name,
+                        "updated": True,
+                        "detail": f"Updated entry for {full_name} on {ladder}",
+                    }
                     queryset.update(
                         player=full_name,
                         data=player._asdict(),
                         combatlog=self,
                         ladder=ladder,
                     )
-                    added = True
+                else:
+                    result = {
+                        "name": full_name,
+                        "updated": False,
+                        "detail": f"No updates for {full_name} on {ladder}",
+                    }
 
-        if not added:
-            raise APIException("No entries were updated")
+                results.append(result)
 
         with transaction.atomic():
             if self.metadata is None:
@@ -104,8 +109,22 @@ class CombatLog(BaseModel):
                 self.metadata.save()
             self.save()
 
+        # Delete any combat logs that do not have ladder entries
+        CombatLog.objects.filter(ladderentry=None).delete()
+
+        return results
+
+    def update_metadata(self):
+        """Parse the Combat Log and create Metadata"""
+        with tempfile.NamedTemporaryFile() as file:
+            file.write(self.data)
+            file.flush()
+            return self.update_metadata_file(file)
+
     def __str__(self):
-        return self.file.name
+        if not self.metadata:
+            return f"Combat Log without Metadata ({self.pk})"
+        return f"{self.metadata.map} {self.metadata.difficulty}"
 
 
 @receiver(models.signals.post_delete, sender=CombatLog)
@@ -116,19 +135,3 @@ def combat_log_post_delete(sender, instance, **kwargs):
 
     if instance.metadata:
         instance.metadata.delete()
-    instance.delete_file()
-
-
-@receiver(models.signals.post_save, sender=CombatLog)
-def combat_log_post_save(sender, instance, created, **kwargs):
-    """
-    Automatically Delete CombatLog file on model deletion.
-    """
-
-    if created:
-        try:
-            instance.update_metadata()
-        except Exception as e:
-            instance.delete()
-            traceback.print_exc()
-            raise APIException(f"Failed to update metadata: {e}")
