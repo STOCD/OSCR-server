@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
         {
-            "src": "OSCR_django/OSCR_django/wsgi.py",
+            "src": "OSCR_django/wsgi.py",
             "use": "@vercel/python",
             "config": {
                 "maxLambdaSize": "15mb",
@@ -13,7 +13,7 @@
             "src": "deploy.sh",
             "use": "@vercel/static-build",
             "config": {
-                "distDir": "OSCR_django/staticfiles"
+                "distDir": "staticfiles"
             }
         }
     ],
@@ -24,7 +24,7 @@
         },
         {
             "src": "/(.*)",
-            "dest": "OSCR_django/OSCR_django/wsgi.py"
+            "dest": "OSCR_django/wsgi.py"
         }
     ]
 }
