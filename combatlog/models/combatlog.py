@@ -4,12 +4,13 @@ import logging
 import tempfile
 
 import OSCR
-from core.models import BaseModel
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils import timezone
-from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
+
+from core.models import BaseModel
+from ladder.models import Ladder, LadderEntry
 
 from .metadata import Metadata
 
@@ -48,8 +49,8 @@ class CombatLog(BaseModel):
             raise APIException("Combat log is empty")
 
         # Grab the highest combat_time. This is used to validate other players.
-        # Player combat_time should be within 95% of the highest time.
-        combat_time = summary[0][1].combat_time * 0.95
+        # Player combat_time should be within 90% of the highest time.
+        combat_time = summary[0][1].combat_time * 0.90
 
         # Check to see if map / difficulty combination exists in the ladder
         # table. if it does, iterate over each player to see if they have a
