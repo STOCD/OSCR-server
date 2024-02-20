@@ -6,4 +6,4 @@ python3 OSCR_django/manage.py migrate --noinput
 python3 OSCR_django/manage.py collectstatic --clear --noinput
 
 # Load the ladder information.
-python3 OSCR_django/manage.py loaddata ladder/fixtures/ladders.json
+python3 OSCR_django/manage.py loaddata OSCR_django/ladder/fixtures/ladders.json
