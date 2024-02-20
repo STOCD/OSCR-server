@@ -167,3 +167,4 @@ api-spec.yaml
 client
 media
 staticfiles
+.vercel
