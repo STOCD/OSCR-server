@@ -20,8 +20,6 @@ LOGGER = logging.getLogger("django")
 class CombatLog(BaseModel):
     """CombatLog Model"""
 
-    data = models.BinaryField(null=True, default=None)
-
     metadata = models.ForeignKey(
         Metadata,
         on_delete=models.CASCADE,
@@ -138,12 +136,16 @@ class CombatLog(BaseModel):
 
         return results
 
-    def update_metadata(self):
+    def update_metadata(self, data):
         """Parse the Combat Log and create Metadata"""
         with tempfile.NamedTemporaryFile() as file:
-            file.write(self.data)
+            file.write(data)
             file.flush()
             return self.update_metadata_file(file)
+
+    def data(self):
+        """Fetch the Combat Log data"""
+        return b""
 
     def __str__(self):
         if not self.metadata:

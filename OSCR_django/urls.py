@@ -15,7 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-# from django.contrib import admin
+from django.conf import settings
+from django.contrib import admin
 from django.urls import include, path
 from drf_yasg.views import get_schema_view
 
@@ -29,10 +30,12 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    # path("admin/", admin.site.urls),
-    # path("swagger/", schema_view.with_ui("swagger")),
     # path("", include("user.urls")),
     path("", include("combatlog.urls.combatlog")),
     path("", include("ladder.urls.ladder")),
     path("", include("ladder.urls.ladder_entry")),
 ]
+
+if settings.ENABLE_DEBUG:
+    urlpatterns.append(path("admin/", admin.site.urls))
+    urlpatterns.append(path("swagger/", schema_view.with_ui("swagger")))
