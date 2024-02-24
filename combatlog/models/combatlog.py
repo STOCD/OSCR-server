@@ -3,14 +3,16 @@
 import logging
 import tempfile
 
-import OSCR
+import requests
+from core.models import BaseModel
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils import timezone
-from rest_framework.exceptions import APIException
-
-from core.models import BaseModel
 from ladder.models import Ladder, LadderEntry
+from rest_framework.exceptions import APIException
+from vercel_storage import blob
+
+import OSCR
 
 from .metadata import Metadata
 
@@ -25,6 +27,8 @@ class CombatLog(BaseModel):
         on_delete=models.CASCADE,
         null=True,
     )
+
+    name = models.TextField(null=True, default=None)
 
     def update_metadata_file(self, file):
         """Update Metadata from a file"""
@@ -120,6 +124,14 @@ class CombatLog(BaseModel):
 
                 results.append(result)
 
+        updated = 0
+        for result in results:
+            if result["updated"]:
+                updated += 1
+
+        if updated == 0:
+            raise APIException("There are no new records in this combat log.")
+
         with transaction.atomic():
             if self.metadata is None:
                 self.metadata = Metadata(
@@ -138,14 +150,37 @@ class CombatLog(BaseModel):
 
     def update_metadata(self, data):
         """Parse the Combat Log and create Metadata"""
+
         with tempfile.NamedTemporaryFile() as file:
             file.write(data)
             file.flush()
-            return self.update_metadata_file(file)
+            res = self.update_metadata_file(file)
 
-    def data(self):
+        try:
+            self.put_data(data)
+        except Exception as e:
+            LOGGER.info(f"Failed to upload data to blob storage: {e}")
+
+        return res
+
+    def get_data_upload_path(self):
+        """Return the Path to the combat log data"""
+        return f"combatlogs/{self.pk}.log"
+
+    def get_data_download_path(self):
+        """Return the Path to the combat log data"""
+        return self.name
+
+    def put_data(self, data):
+        """Store the Combat Log data"""
+        self.name = blob.put(
+            pathname=self.get_data_upload_path(), body=data, options={}
+        )["url"]
+        self.save()
+
+    def get_data(self):
         """Fetch the Combat Log data"""
-        return b""
+        return requests.get(self.get_data_download_path()).content
 
     def __str__(self):
         if not self.metadata:

@@ -1,8 +1,7 @@
 """ CombatLog Serializers """
 
-from rest_framework import serializers
-
 from combatlog.models import CombatLog
+from rest_framework import serializers
 
 from .metadata import MetadataSerializer
 
@@ -14,7 +13,7 @@ class CombatLogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CombatLog
-        fields = "__all__"
+        exclude = ["name"]
 
 
 class CombatLogUploadSerializer(serializers.Serializer):
