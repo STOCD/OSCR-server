@@ -13,9 +13,7 @@ class CombatLogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CombatLog
-        exclude = [
-            "data",
-        ]
+        exclude = ["name"]
 
 
 class CombatLogUploadSerializer(serializers.Serializer):
@@ -30,3 +28,4 @@ class CombatLogUploadResponseSerializer(serializers.Serializer):
     name = serializers.CharField()
     updated = serializers.BooleanField()
     detail = serializers.CharField()
+    value = serializers.FloatField()

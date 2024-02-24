@@ -4,7 +4,7 @@ django backend for OSCR
 OSCR-server is a backend for [OSCR](https://github.com/STOCD/OSCR/tree/main) with the intent
 of recording combat log data.
 
-There is a test server located at [kraust-oscr.koyeb.app](https://kraust-oscr.koyeb.app/swagger/)
+There is a test server located at [https://oscr-server.vercel.app/](https://oscr-server.vercel.app/)
 
 # Requirements
 see requirements.txt
@@ -12,19 +12,14 @@ see requirements.txt
 # Running
 ## Development
 ```bash
-python3 manage.py migrate
+ENABLE_DEBUG=y python3 manage.py migrate
 ENABLE_DEBUG=y python3 manage.py runserver
 ```
 
 ## Production
 
-This Project should be deployable to cloud docker providers, however OSCR-server
-is not currently production ready and needs to address its DB backend first.
-
-- Currently we use the default sqlite provider which is not acceptable in cloud
-deployments. In the future we will move to postgres.
-
-- Logs may also be stored in DB instead of on the local FS.
+This project has been tested to be deployable to [vercel](https://vercel.com) and includes
+Support for both vercel's blob and postgres integrations.
 
 # Create the superuser (for django admin):
 
