@@ -5,6 +5,7 @@ import tempfile
 
 import requests
 from core.models import BaseModel
+from django.conf import settings
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils import timezone
@@ -173,14 +174,17 @@ class CombatLog(BaseModel):
 
     def put_data(self, data):
         """Store the Combat Log data"""
-        self.name = blob.put(
-            pathname=self.get_data_upload_path(), body=data, options={}
-        )["url"]
-        self.save()
+        if not settings.ENABLE_DEBUG:
+            self.name = blob.put(
+                pathname=self.get_data_upload_path(), body=data, options={}
+            )["url"]
+            self.save()
 
     def get_data(self):
         """Fetch the Combat Log data"""
-        return requests.get(self.get_data_download_path()).content
+        if not settings.ENABLE_DEBUG:
+            return requests.get(self.get_data_download_path()).content
+        return b""
 
     def __str__(self):
         if not self.metadata:
