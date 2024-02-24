@@ -77,6 +77,7 @@ class CombatLog(BaseModel):
                         "name": full_name,
                         "updated": False,
                         "detail": f"{full_name}'s combat time was too low.",
+                        "value": combat_time,
                     }
                 )
                 continue
@@ -91,6 +92,7 @@ class CombatLog(BaseModel):
                         "name": full_name,
                         "updated": True,
                         "detail": f"New entry for {full_name} on {ladder}",
+                        "value": getattr(player, ladder.metric),
                     }
                     LadderEntry.objects.create(
                         player=full_name,
@@ -99,16 +101,13 @@ class CombatLog(BaseModel):
                         ladder=ladder,
                     )
                 elif not queryset.filter(
-                    **{
-                        f"data__{ladder.metric}__gte": getattr(
-                            player, f"{ladder.metric}"
-                        )
-                    }
+                    **{f"data__{ladder.metric}__gte": getattr(player, ladder.metric)}
                 ).count():
                     result = {
                         "name": full_name,
                         "updated": True,
                         "detail": f"Updated entry for {full_name} on {ladder}",
+                        "value": getattr(player, ladder.metric),
                     }
                     queryset.update(
                         player=full_name,
@@ -121,6 +120,7 @@ class CombatLog(BaseModel):
                         "name": full_name,
                         "updated": False,
                         "detail": f"No updates for {full_name} on {ladder}",
+                        "value": getattr(player, ladder.metric),
                     }
 
                 results.append(result)

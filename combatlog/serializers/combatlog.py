@@ -28,3 +28,4 @@ class CombatLogUploadResponseSerializer(serializers.Serializer):
     name = serializers.CharField()
     updated = serializers.BooleanField()
     detail = serializers.CharField()
+    value = serializers.FloatField()
