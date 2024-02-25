@@ -83,6 +83,9 @@ class CombatLog(BaseModel):
                 continue
 
             for ladder in ladders:
+                if ladder.is_solo and len(summary) != 1:
+                    continue
+
                 queryset = LadderEntry.objects.filter(
                     ladder=ladder,
                     player=full_name,
