@@ -1,96 +1,96 @@
 [
     {
         "model": "ladder.Ladder",
-        "pk": 1,
+        "pk": 1001,
         "fields": {
             "name": "Infected: The Conduit",
             "difficulty": "Elite",
             "metric": "DPS",
-            "is_solo": false,
+            "is_solo": true,
             "internal_name": "Infected Space",
             "internal_difficulty": "Elite"
         }
     },
     {
         "model": "ladder.Ladder",
-        "pk": 2,
+        "pk": 1002,
         "fields": {
             "name": "Infected: The Conduit",
             "difficulty": "Advanced",
             "metric": "DPS",
-            "is_solo": false,
+            "is_solo": true,
             "internal_name": "Infected Space",
             "internal_difficulty": "Advanced"
         }
     },
     {
         "model": "ladder.Ladder",
-        "pk": 3,
+        "pk": 1003,
         "fields": {
             "name": "Hive: Onslaught",
             "difficulty": "Elite",
             "metric": "DPS",
-            "is_solo": false,
+            "is_solo": true,
             "internal_name": "Hive Space",
             "internal_difficulty": "Elite"
         }
     },
     {
         "model": "ladder.Ladder",
-        "pk": 4,
+        "pk": 1004,
         "fields": {
             "name": "Hive: Onslaught",
             "difficulty": "Advanced",
             "metric": "DPS",
-            "is_solo": false,
+            "is_solo": true,
             "internal_name": "Hive Space",
             "internal_difficulty": "Advanced"
         }
     },
     {
         "model": "ladder.Ladder",
-        "pk": 5,
+        "pk": 1005,
         "fields": {
             "name": "Bug Hunt",
             "difficulty": "Elite",
             "metric": "DPS",
-            "is_solo": false,
+            "is_solo": true,
             "internal_name": "Bug Hunt",
             "internal_difficulty": "Elite"
         }
     },
     {
         "model": "ladder.Ladder",
-        "pk": 6,
+        "pk": 1006,
         "fields": {
             "name": "Miner Instabilities",
             "difficulty": "Elite",
             "metric": "DPS",
-            "is_solo": false,
+            "is_solo": true,
             "internal_name": "Miner Instabilities",
             "internal_difficulty": "Elite"
         }
     },
     {
         "model": "ladder.Ladder",
-        "pk": 7,
+        "pk": 1007,
         "fields": {
             "name": "Jupiter Station Shoadown",
             "difficulty": "Elite",
             "metric": "DPS",
-            "is_solo": false,
+            "is_solo": true,
             "internal_name": "Jupiter Station Showdown",
             "internal_difficulty": "Elite"
         }
     },
     {
         "model": "ladder.Ladder",
-        "pk": 8,
+        "pk": 1008,
         "fields": {
             "name": "Operation Wolf",
             "difficulty": "Normal",
             "metric": "DPS",
-            "is_solo": false,
+            "is_solo": true,
             "internal_name": "Operation Wolf",
             "internal_difficulty": "Normal"
         }

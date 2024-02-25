@@ -7,3 +7,4 @@ python3 manage.py collectstatic --clear --noinput
 
 # Load the ladder information.
 python3 manage.py loaddata ladder/fixtures/ladders.json
+python3 manage.py loaddata ladder/fixtures/ladders_solo.json
