@@ -60,6 +60,23 @@ class LadderEntryFilter(BaseFilterSet):
                         method="filter_json_field_value",
                     )
                 else:
+                    for expr in [
+                        "exact",
+                        "iexact",
+                        "contains",
+                        "icontains",
+                        "istartswith",
+                        "startswith",
+                        "endswith",
+                        "iendswith",
+                        "iregex",
+                        "regex",
+                    ]:
+                        self.base_filters[f"data__{k}__{expr}"] = filters.CharFilter(
+                            field_name=f"data__{k}__{expr}",
+                            label=f"data__{k}__{expr}",
+                            method="filter_json_field_value",
+                        )
                     self.base_filters[f"data__{k}"] = filters.CharFilter(
                         field_name=f"data__{k}",
                         label=f"data__{k}",
