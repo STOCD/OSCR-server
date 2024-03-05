@@ -14,7 +14,7 @@ class LadderEntrySerializer(serializers.ModelSerializer):
         """Return the date of the combat log"""
         return obj.combatlog.metadata.date_time
 
-    def get_rank(self, obj):
+    def get_rank(self, obj) -> int:
         """Return the rank of the ladder entry with respect to the ladder"""
         key = f"data__{obj.ladder.metric}__gte"
         flt = {key: obj.data.get(obj.ladder.metric, 0)}
