@@ -10,6 +10,19 @@ from ladder.models import LadderEntry
 
 LOGGER = logging.getLogger("django")
 
+CHAR_FILTERS = [
+    "exact",
+    "iexact",
+    "contains",
+    "icontains",
+    "istartswith",
+    "startswith",
+    "endswith",
+    "iendswith",
+    "iregex",
+    "regex",
+]
+
 
 class LadderEntryFilter(BaseFilterSet):
     """Filter for Tasks API"""
@@ -18,12 +31,13 @@ class LadderEntryFilter(BaseFilterSet):
         """Meta class for the application filter"""
 
         model = LadderEntry
-        fields = [
-            "player",
-            "ladder",
-            "ladder__name",
-            "ladder__difficulty",
-        ]
+        fields = {
+            "player": CHAR_FILTERS,
+            "ladder": ["exact"],
+            "ladder__name": CHAR_FILTERS,
+            "ladder__difficulty": CHAR_FILTERS,
+            "ladder__is_solo": ["exact"],
+        }
         filter_overrides = {
             JSONField: {
                 "filter_class": filters.CharFilter,
@@ -60,6 +74,12 @@ class LadderEntryFilter(BaseFilterSet):
                         method="filter_json_field_value",
                     )
                 else:
+                    for expr in CHAR_FILTERS:
+                        self.base_filters[f"data__{k}__{expr}"] = filters.CharFilter(
+                            field_name=f"data__{k}__{expr}",
+                            label=f"data__{k}__{expr}",
+                            method="filter_json_field_value",
+                        )
                     self.base_filters[f"data__{k}"] = filters.CharFilter(
                         field_name=f"data__{k}",
                         label=f"data__{k}",

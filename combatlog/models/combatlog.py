@@ -42,18 +42,23 @@ class CombatLog(BaseModel):
         # Only look at the first combat for now.
         parser.shallow_combat_analysis(0)
         combat = parser.active_combat
-        summary = sorted(
-            parser.active_combat.player_dict.items(),
+
+        players = {}
+        for name, player in parser.active_combat.players.items():
+            players[name] = player.__dict__
+
+        players = sorted(
+            players.items(),
             reverse=True,
-            key=lambda player: player[1].combat_time,
+            key=lambda player: player[1]["combat_time"],
         )
 
-        if len(summary) == 0:
+        if len(players) == 0:
             raise APIException("Combat log is empty")
 
         # Grab the highest combat_time. This is used to validate other players.
         # Player combat_time should be within 90% of the highest time.
-        combat_time = summary[0][1].combat_time * 0.90
+        combat_time = players[0][1]["combat_time"] * 0.90
 
         # Check to see if map / difficulty combination exists in the ladder
         # table. if it does, iterate over each player to see if they have a
@@ -70,8 +75,9 @@ class CombatLog(BaseModel):
                 f"{combat.map} {combat.difficulty} is not a valid ladder"
             )
 
-        for full_name, player in summary:
-            if player.combat_time < combat_time:
+        for _, player in players:
+            full_name = f"{player['name']}{player['handle']}"
+            if player["combat_time"] < combat_time:
                 results.append(
                     {
                         "name": full_name,
@@ -83,7 +89,7 @@ class CombatLog(BaseModel):
                 continue
 
             for ladder in ladders:
-                if ladder.is_solo and len(summary) != 1:
+                if ladder.is_solo and len(players) != 1:
                     continue
 
                 queryset = LadderEntry.objects.filter(
@@ -95,26 +101,26 @@ class CombatLog(BaseModel):
                         "name": full_name,
                         "updated": True,
                         "detail": f"New entry for {full_name} on {ladder}",
-                        "value": getattr(player, ladder.metric),
+                        "value": player.get(ladder.metric),
                     }
                     LadderEntry.objects.create(
                         player=full_name,
-                        data=player._asdict(),
+                        data=player,
                         combatlog=self,
                         ladder=ladder,
                     )
                 elif not queryset.filter(
-                    **{f"data__{ladder.metric}__gte": getattr(player, ladder.metric)}
+                    **{f"data__{ladder.metric}__gte": player.get(ladder.metric)}
                 ).count():
                     result = {
                         "name": full_name,
                         "updated": True,
                         "detail": f"Updated entry for {full_name} on {ladder}",
-                        "value": getattr(player, ladder.metric),
+                        "value": player.get(ladder.metric),
                     }
                     queryset.update(
                         player=full_name,
-                        data=player._asdict(),
+                        data=player,
                         combatlog=self,
                         ladder=ladder,
                     )
@@ -123,7 +129,7 @@ class CombatLog(BaseModel):
                         "name": full_name,
                         "updated": False,
                         "detail": f"No updates for {full_name} on {ladder}",
-                        "value": getattr(player, ladder.metric),
+                        "value": player.get(ladder.metric),
                     }
 
                 results.append(result)
@@ -142,7 +148,7 @@ class CombatLog(BaseModel):
                     map=combat.map,
                     difficulty=combat.difficulty,
                     date_time=timezone.make_aware(combat.date_time),
-                    summary=summary,
+                    summary=players,
                 )
                 self.metadata.save()
             self.save()
