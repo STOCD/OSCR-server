@@ -75,7 +75,7 @@
         "model": "ladder.Ladder",
         "pk": 7,
         "fields": {
-            "name": "Jupiter Station Shoadown",
+            "name": "Jupiter Station Showdown",
             "difficulty": "Elite",
             "metric": "DPS",
             "is_solo": false,
