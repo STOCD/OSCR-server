@@ -153,12 +153,6 @@ class CombatLog(BaseModel):
                 updated += 1
 
         if updated == 0:
-            if self.metadata:
-                self.metadata.summary = players
-                self.metadata.save()
-                self.save()
-            if force_update:
-                return
             raise APIException("There are no new records in this combat log.")
 
         with transaction.atomic():
