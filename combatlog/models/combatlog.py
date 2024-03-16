@@ -31,7 +31,13 @@ class CombatLog(BaseModel):
 
     name = models.TextField(null=True, default=None)
 
-    def update_metadata_file(self, file):
+    def update_metadata_from_remote(self):
+        """Updates Metadata from remote storage"""
+        data = self.get_data()
+        if data:
+            self.update_metadata(data, force_update=True)
+
+    def update_metadata_file(self, file, force_update=False):
         """Update Metadata from a file"""
 
         results = []
@@ -131,6 +137,13 @@ class CombatLog(BaseModel):
                         "detail": f"No updates for {full_name} on {ladder}",
                         "value": player.get(ladder.metric),
                     }
+                    if force_update:
+                        queryset.update(
+                            player=full_name,
+                            data=player,
+                            combatlog=self,
+                            ladder=ladder,
+                        )
 
                 results.append(result)
 
@@ -140,6 +153,12 @@ class CombatLog(BaseModel):
                 updated += 1
 
         if updated == 0:
+            if self.metadata:
+                self.metadata.summary = players
+                self.metadata.save()
+                self.save()
+            if force_update:
+                return
             raise APIException("There are no new records in this combat log.")
 
         with transaction.atomic():
@@ -158,18 +177,14 @@ class CombatLog(BaseModel):
 
         return results
 
-    def update_metadata(self, data):
+    def update_metadata(self, data, force_update=True):
         """Parse the Combat Log and create Metadata"""
 
         with tempfile.NamedTemporaryFile() as file:
             file.write(data)
             file.flush()
-            res = self.update_metadata_file(file)
-
-        try:
+            res = self.update_metadata_file(file, force_update=force_update)
             self.put_data(data)
-        except Exception as e:
-            LOGGER.info(f"Failed to upload data to blob storage: {e}")
 
         return res
 
@@ -191,6 +206,8 @@ class CombatLog(BaseModel):
 
     def get_data(self):
         """Fetch the Combat Log data"""
+        if self.get_data_download_path() is None:
+            return b""
         if not settings.ENABLE_DEBUG:
             return requests.get(self.get_data_download_path()).content
         return b""
@@ -209,3 +226,6 @@ def combat_log_post_delete(sender, instance, **kwargs):
 
     if instance.metadata:
         instance.metadata.delete()
+
+    if instance.get_data_download_path():
+        blob.delete(instance.get_data_download_path(), options={"debug": False})
