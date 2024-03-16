@@ -35,9 +35,9 @@ class CombatLog(BaseModel):
         """Updates Metadata from remote storage"""
         data = self.get_data()
         if data:
-            self.update_metadata(data, force_update=True)
+            self.update_metadata(data)
 
-    def update_metadata_file(self, file, force_update=False):
+    def update_metadata_file(self, file):
         """Update Metadata from a file"""
 
         results = []
@@ -137,13 +137,6 @@ class CombatLog(BaseModel):
                         "detail": f"No updates for {full_name} on {ladder}",
                         "value": player.get(ladder.metric),
                     }
-                    if force_update:
-                        queryset.update(
-                            player=full_name,
-                            data=player,
-                            combatlog=self,
-                            ladder=ladder,
-                        )
 
                 results.append(result)
 
@@ -171,13 +164,13 @@ class CombatLog(BaseModel):
 
         return results
 
-    def update_metadata(self, data, force_update=True):
+    def update_metadata(self, data):
         """Parse the Combat Log and create Metadata"""
 
         with tempfile.NamedTemporaryFile() as file:
             file.write(data)
             file.flush()
-            res = self.update_metadata_file(file, force_update=force_update)
+            res = self.update_metadata_file(file)
             self.put_data(data)
 
         return res
