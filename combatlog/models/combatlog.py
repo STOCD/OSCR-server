@@ -1,9 +1,10 @@
 """ CombatLog Models """
 
 import logging
+import os
 import tempfile
+from pathlib import Path
 
-import requests
 from core.models import BaseModel
 from django.conf import settings
 from django.db import models, transaction
@@ -11,7 +12,6 @@ from django.dispatch import receiver
 from django.utils import timezone
 from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
-from vercel_storage import blob
 
 import OSCR
 
@@ -177,27 +177,34 @@ class CombatLog(BaseModel):
 
     def get_data_upload_path(self):
         """Return the Path to the combat log data"""
-        return f"combatlogs/{self.pk}.log"
+        return os.path.join(settings.UPLOAD_ROOT, "combatlogs", f"{self.pk}.log")
 
     def get_data_download_path(self):
         """Return the Path to the combat log data"""
         return self.name
 
-    def put_data(self, data):
-        """Store the Combat Log data"""
-        if not settings.ENABLE_DEBUG:
-            self.name = blob.put(
-                pathname=self.get_data_upload_path(), body=data, options={}
-            )["url"]
-            self.save()
-
     def get_data(self):
         """Fetch the Combat Log data"""
         if self.get_data_download_path() is None:
             return b""
-        if not settings.ENABLE_DEBUG:
-            return requests.get(self.get_data_download_path()).content
-        return b""
+        with open(self.get_data_upload_path(), "rb") as file:
+            return file.read()
+
+    def put_data(self, data):
+        """Store the Combat Log data"""
+        parent = Path(self.get_data_upload_path()).parent
+        if not os.path.exists(parent):
+            os.makedirs(parent, exist_ok=True)
+
+        with open(self.get_data_upload_path(), "wb") as file:
+            file.write(data)
+        self.name = self.get_data_upload_path()
+        self.save()
+
+    def delete_data(self):
+        """Delete the Combat Log data"""
+        if os.path.exists(self.get_data_upload_path()):
+            os.remove(self.get_data_upload_path())
 
     def __str__(self):
         if not self.metadata:
@@ -215,4 +222,4 @@ def combat_log_post_delete(sender, instance, **kwargs):
         instance.metadata.delete()
 
     if instance.get_data_download_path():
-        blob.delete(instance.get_data_download_path(), options={"debug": False})
+        instance.delete_data()
