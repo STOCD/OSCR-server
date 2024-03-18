@@ -168,7 +168,6 @@ client
 media
 staticfiles
 .vercel
-.env
 
 # New ignores for docker-compose
 data
