@@ -4,8 +4,6 @@ django backend for OSCR
 OSCR-server is a backend for [OSCR](https://github.com/STOCD/OSCR/tree/main) with the intent
 of recording combat log data.
 
-There is a test server located at [https://oscr-server.vercel.app/](https://oscr-server.vercel.app/)
-
 # Requirements
 see requirements.txt
 
