@@ -1,9 +1,10 @@
 """ CombatLog Models """
 
 import logging
+import os
 import tempfile
+from pathlib import Path
 
-import requests
 from core.models import BaseModel
 from django.conf import settings
 from django.db import models, transaction
@@ -11,7 +12,6 @@ from django.dispatch import receiver
 from django.utils import timezone
 from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
-from vercel_storage import blob
 
 import OSCR
 
@@ -35,9 +35,9 @@ class CombatLog(BaseModel):
         """Updates Metadata from remote storage"""
         data = self.get_data()
         if data:
-            self.update_metadata(data, force_update=True)
+            self.update_metadata(data)
 
-    def update_metadata_file(self, file, force_update=False):
+    def update_metadata_file(self, file):
         """Update Metadata from a file"""
 
         results = []
@@ -137,13 +137,6 @@ class CombatLog(BaseModel):
                         "detail": f"No updates for {full_name} on {ladder}",
                         "value": player.get(ladder.metric),
                     }
-                    if force_update:
-                        queryset.update(
-                            player=full_name,
-                            data=player,
-                            combatlog=self,
-                            ladder=ladder,
-                        )
 
                 results.append(result)
 
@@ -153,12 +146,6 @@ class CombatLog(BaseModel):
                 updated += 1
 
         if updated == 0:
-            if self.metadata:
-                self.metadata.summary = players
-                self.metadata.save()
-                self.save()
-            if force_update:
-                return
             raise APIException("There are no new records in this combat log.")
 
         with transaction.atomic():
@@ -177,40 +164,47 @@ class CombatLog(BaseModel):
 
         return results
 
-    def update_metadata(self, data, force_update=True):
+    def update_metadata(self, data):
         """Parse the Combat Log and create Metadata"""
 
         with tempfile.NamedTemporaryFile() as file:
             file.write(data)
             file.flush()
-            res = self.update_metadata_file(file, force_update=force_update)
+            res = self.update_metadata_file(file)
             self.put_data(data)
 
         return res
 
     def get_data_upload_path(self):
         """Return the Path to the combat log data"""
-        return f"combatlogs/{self.pk}.log"
+        return os.path.join(settings.UPLOAD_ROOT, "combatlogs", f"{self.pk}.log")
 
     def get_data_download_path(self):
         """Return the Path to the combat log data"""
         return self.name
 
-    def put_data(self, data):
-        """Store the Combat Log data"""
-        if not settings.ENABLE_DEBUG:
-            self.name = blob.put(
-                pathname=self.get_data_upload_path(), body=data, options={}
-            )["url"]
-            self.save()
-
     def get_data(self):
         """Fetch the Combat Log data"""
         if self.get_data_download_path() is None:
             return b""
-        if not settings.ENABLE_DEBUG:
-            return requests.get(self.get_data_download_path()).content
-        return b""
+        with open(self.get_data_upload_path(), "rb") as file:
+            return file.read()
+
+    def put_data(self, data):
+        """Store the Combat Log data"""
+        parent = Path(self.get_data_upload_path()).parent
+        if not os.path.exists(parent):
+            os.makedirs(parent, exist_ok=True)
+
+        with open(self.get_data_upload_path(), "wb") as file:
+            file.write(data)
+        self.name = self.get_data_upload_path()
+        self.save()
+
+    def delete_data(self):
+        """Delete the Combat Log data"""
+        if os.path.exists(self.get_data_upload_path()):
+            os.remove(self.get_data_upload_path())
 
     def __str__(self):
         if not self.metadata:
@@ -228,4 +222,4 @@ def combat_log_post_delete(sender, instance, **kwargs):
         instance.metadata.delete()
 
     if instance.get_data_download_path():
-        blob.delete(instance.get_data_download_path(), options={"debug": False})
+        instance.delete_data()

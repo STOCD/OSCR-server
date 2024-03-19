@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 # This is the entrypoint into the django server.
 # We perform automatic migrations which may not be desirable.
+
+set -e
 
 (
     python3 manage.py migrate --noinput

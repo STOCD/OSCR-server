@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  db:
+    image: mariadb:10.11
+    restart: always
+    container_name: oscr-db
+    hostname: oscr-db
+    env_file: .env
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--su-mysql",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      timeout: 30s
+    ports:
+      - "127.0.0.1:${MARIADB_PORT}:3306"
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oscr-server
+    hostname: oscr-server
+    restart: always
+    command: /opt/OSCR-server/entrypoint.sh
+    env_file: .env
+    volumes:
+      - ./:${OSCR_ROOT}:ro
+      - ${OSCR_STATICFILES}:${OSCR_ROOT}/staticfiles:rw
+      - ${OSCR_UPLOADS}:${OSCR_ROOT}/uploads:rw
+      - ${OSCR_DATA}:/opt/data:rw
+    working_dir: /opt/OSCR-server
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
