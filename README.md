@@ -16,11 +16,6 @@ ENABLE_DEBUG=y python3 manage.py runserver
 
 ## Production
 
-### Serverless
-
-This project has been tested to be deployable to [vercel](https://vercel.com) and includes
-Support for both vercel's blob and postgres integrations.
-
 ### Docker Compose
 
 Docker Compose streamlines running an instance of OSCR on a server. There is a sample
