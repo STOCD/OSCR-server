@@ -10,6 +10,9 @@ class Variant(BaseNameModel):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
 
+    is_ground_variant = models.BooleanField(default=True)
+    is_space_variant = models.BooleanField(default=True)
+
     # Exclude subset-variants from the results. e.g.
     # The "default" variant can omit the Season 31 pre-Flagship Staffing nerf from its results.
     exclude_space = models.ManyToManyField("self")
