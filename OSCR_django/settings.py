@@ -91,7 +91,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_ROOT = BASE_DIR / "media"
 UPLOAD_ROOT = BASE_DIR / "uploads"
 
-if os.environ.get("DB_PROVIDER") == "sqlite":
+if os.environ.get("DB_PROVIDER", "sqlite") == "sqlite":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",

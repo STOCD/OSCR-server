@@ -7,6 +7,7 @@
             "difficulty": "Elite",
             "metric": "DPS",
             "is_solo": true,
+            "is_space": true,
             "internal_name": "Infected Space",
             "internal_difficulty": "Elite"
         }
@@ -19,6 +20,7 @@
             "difficulty": "Advanced",
             "metric": "DPS",
             "is_solo": true,
+            "is_space": true,
             "internal_name": "Infected Space",
             "internal_difficulty": "Advanced"
         }
@@ -31,6 +33,7 @@
             "difficulty": "Elite",
             "metric": "DPS",
             "is_solo": true,
+            "is_space": true,
             "internal_name": "Hive Space",
             "internal_difficulty": "Elite"
         }
@@ -43,6 +46,7 @@
             "difficulty": "Advanced",
             "metric": "DPS",
             "is_solo": true,
+            "is_space": true,
             "internal_name": "Hive Space",
             "internal_difficulty": "Advanced"
         }
@@ -55,6 +59,7 @@
             "difficulty": "Elite",
             "metric": "DPS",
             "is_solo": true,
+            "is_space": false,
             "internal_name": "Bug Hunt",
             "internal_difficulty": "Elite"
         }
@@ -67,6 +72,7 @@
             "difficulty": "Elite",
             "metric": "DPS",
             "is_solo": true,
+            "is_space": false,
             "internal_name": "Miner Instabilities",
             "internal_difficulty": "Elite"
         }
@@ -79,6 +85,7 @@
             "difficulty": "Elite",
             "metric": "DPS",
             "is_solo": true,
+            "is_space": false,
             "internal_name": "Jupiter Station Showdown",
             "internal_difficulty": "Elite"
         }
@@ -91,6 +98,7 @@
             "difficulty": "Normal",
             "metric": "DPS",
             "is_solo": true,
+            "is_space": false,
             "internal_name": "Operation Wolf",
             "internal_difficulty": "Normal"
         }
