@@ -5,15 +5,15 @@ import os
 import tempfile
 from pathlib import Path
 
-from core.models import BaseModel
+import OSCR
 from django.conf import settings
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils import timezone
-from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
 
-import OSCR
+from core.models import BaseModel
+from ladder.models import Ladder, LadderEntry
 
 from .metadata import Metadata
 
@@ -71,14 +71,39 @@ class CombatLog(BaseModel):
         # higher key. If any of them do, allow uploading of the log and
         # add/update players into the league table.
 
+        # FIXME: This spams a lot of DateTimeField Variant... has received a
+        #        naive datetime messages here. This is because there's no way
+        #        to know the combat log's time zone purely from the combat log.
+        #        Great job Cryptic.
+
         ladders = Ladder.objects.filter(
             internal_name=combat.map,
             internal_difficulty=combat.difficulty,
+            variant__start_date__lte=combat.start_time,
+            variant__end_date__gt=combat.end_time,
         )
 
-        if ladders.count() == 0:
+        # Now need to apply exclusions
+        adjusted_ladders = []
+        for ladder in ladders:
+            if ladder.variant.is_space_variant:
+                if ladder.variant.exclude_space.filter(
+                    start_date__lte=combat.start_time,
+                    end_date__gt=combat.end_time,
+                ).count():
+                    continue
+            elif ladder.variant.is_ground_variant:
+                if ladder.variant.exclude_ground.filter(
+                    start_date__lte=combat.start_time,
+                    end_date__gt=combat.end_time,
+                ).count():
+                    continue
+            adjusted_ladders.append(ladder)
+        ladders = adjusted_ladders
+
+        if len(ladders) == 0:
             raise APIException(
-                f"{combat.map} {combat.difficulty} is not a valid ladder"
+                f"{combat.map} {combat.difficulty} at {combat.start_time} has no matching ladder"
             )
 
         for _, player in players:

@@ -7,6 +7,17 @@ of recording combat log data.
 # Requirements
 see requirements.txt
 
+# Generating Ladders
+
+OSCR's base ladders are shipped as Django Fixtures, and additional ladder variants
+need to be manually created by running a manage.py command.
+
+```bash
+python3 manage.py genladders
+```
+
+This process happens automatically when running docker compose.
+
 # Running
 ## Development
 ```bash
@@ -43,7 +54,7 @@ API Specs are packaged along with our releases.
 
 
 ```bash
-python3 OSCR-django/manage.py generate_swagger -f yaml -u http://127.0.0.1 api-spec.yaml
+python3 manage.py generate_swagger -f yaml -u http://127.0.0.1 api-spec.yaml
 ```
 
 # Creating an API Client

@@ -1,7 +1,8 @@
 """ LadderEntry Models """
 
-from core.models import BaseModel
 from django.db import models
+
+from core.models import BaseModel
 
 from .ladder import Ladder
 
@@ -16,7 +17,7 @@ class LadderEntry(BaseModel):
     ladder = models.ForeignKey(Ladder, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.player} | {self.ladder.name} ({self.ladder.difficulty}) - {self.data['DPS']:,.0f} DPS"
+        return f"{self.player} | {self.ladder.name} ({self.ladder.difficulty}, {self.ladder.variant.name}) - {self.data['DPS']:,.0f} DPS"
 
     @classmethod
     def ordering_fields(cls):
