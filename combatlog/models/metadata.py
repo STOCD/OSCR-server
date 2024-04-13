@@ -8,7 +8,7 @@ class Metadata(BaseModel):
     """Combat Log Model"""
 
     map = models.TextField()
-    difficulty = models.TextField()
+    difficulty = models.TextField(null=True, default=None)
     summary = models.JSONField()
     date_time = models.DateTimeField(null=True, default=None)
 

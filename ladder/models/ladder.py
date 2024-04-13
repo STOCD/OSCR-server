@@ -15,14 +15,14 @@ class Ladder(BaseModel):
     """Ladder Model"""
 
     name = models.TextField()
-    difficulty = models.TextField()
+    difficulty = models.TextField(null=True, default=None)
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
     is_solo = models.BooleanField(default=False)
     is_space = models.BooleanField(default=True)
     metric = models.TextField()
 
     internal_name = models.TextField()
-    internal_difficulty = models.TextField()
+    internal_difficulty = models.TextField(null=True, default=None)
 
     def create_variant(self, variant):
         """Create variant of ladder"""
@@ -50,4 +50,4 @@ class Ladder(BaseModel):
                 self.create_variant(variant)
 
     def __str__(self):
-        return f"{' [Solo]' if self.is_solo else ''} ({self.variant.name}) {self.name} {self.difficulty} {self.metric}"
+        return f"{'[Solo]' if self.is_solo else ''} ({self.variant.name}) {self.name} {self.difficulty} {self.metric}"

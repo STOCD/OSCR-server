@@ -5,15 +5,15 @@ import os
 import tempfile
 from pathlib import Path
 
-import OSCR
+from core.models import BaseModel
 from django.conf import settings
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils import timezone
+from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
 
-from core.models import BaseModel
-from ladder.models import Ladder, LadderEntry
+import OSCR
 
 from .metadata import Metadata
 
@@ -86,13 +86,13 @@ class CombatLog(BaseModel):
         # Now need to apply exclusions
         adjusted_ladders = []
         for ladder in ladders:
-            if ladder.variant.is_space_variant:
+            if ladder.is_space and ladder.variant.is_space_variant:
                 if ladder.variant.exclude_space.filter(
                     start_date__lte=combat.start_time,
                     end_date__gt=combat.end_time,
                 ).count():
                     continue
-            elif ladder.variant.is_ground_variant:
+            elif not ladder.is_space and ladder.variant.is_ground_variant:
                 if ladder.variant.exclude_ground.filter(
                     start_date__lte=combat.start_time,
                     end_date__gt=combat.end_time,
