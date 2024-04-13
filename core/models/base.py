@@ -10,3 +10,12 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class BaseNameModel(models.Model):
+    """Base Model with Name field"""
+
+    name = models.TextField(primary_key=True)
+
+    class Meta:
+        abstract = True

@@ -1,0 +1,57 @@
+[
+    {
+        "model": "ladder.Variant",
+        "pk": "Default",
+        "fields": {
+            "start_date": "2024-02-15T12:00:00+00:00",
+            "end_date": "2099-12-31T23:59:59+00:00",
+            "is_ground_variant": true,
+            "is_space_variant": true,
+            "exclude_space": [
+                "Pre-OSCR records",
+                "Season 31 (pre-Flagship Staffing fix)"
+            ],
+            "exclude_ground": [
+                "Pre-OSCR records"
+            ]
+        }
+    },
+    {
+        "model": "ladder.Variant",
+        "pk": "Pre-OSCR records",
+        "fields": {
+            "start_date": "1900-01-01T00:00:00+00:00",
+            "end_date": "2024-02-15T11:59:59+00:00",
+            "is_ground_variant": true,
+            "is_space_variant": true,
+            "exclude_space": [],
+            "exclude_ground": []
+        }
+    },
+    {
+        "model": "ladder.Variant",
+        "pk": "Season 31 (pre-Flagship Staffing fix)",
+        "fields": {
+            "start_date": "2024-02-15T12:00:00+00:00",
+            "end_date": "2024-03-26T12:00:00+00:00",
+            "is_ground_variant": false,
+            "is_space_variant": true,
+            "exclude_space": [],
+            "exclude_ground": []
+        }
+    },
+    {
+        "model": "ladder.Variant",
+        "pk": "Season 31 - Both Worlds",
+        "fields": {
+            "start_date": "2024-02-15T12:00:00+00:00",
+            "end_date": "2099-12-31T23:59:59+00:00",
+            "is_ground_variant": true,
+            "is_space_variant": true,
+            "exclude_space": [
+                "Season 31 (pre-Flagship Staffing fix)"
+            ],
+            "exclude_ground": []
+        }
+    }
+]

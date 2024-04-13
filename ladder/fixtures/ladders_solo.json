@@ -6,7 +6,9 @@
             "name": "Infected: The Conduit",
             "difficulty": "Elite",
             "metric": "DPS",
+            "variant": "Default",
             "is_solo": true,
+            "is_space": true,
             "internal_name": "Infected Space",
             "internal_difficulty": "Elite"
         }
@@ -18,7 +20,9 @@
             "name": "Infected: The Conduit",
             "difficulty": "Advanced",
             "metric": "DPS",
+            "variant": "Default",
             "is_solo": true,
+            "is_space": true,
             "internal_name": "Infected Space",
             "internal_difficulty": "Advanced"
         }
@@ -30,7 +34,9 @@
             "name": "Hive: Onslaught",
             "difficulty": "Elite",
             "metric": "DPS",
+            "variant": "Default",
             "is_solo": true,
+            "is_space": true,
             "internal_name": "Hive Space",
             "internal_difficulty": "Elite"
         }
@@ -42,7 +48,9 @@
             "name": "Hive: Onslaught",
             "difficulty": "Advanced",
             "metric": "DPS",
+            "variant": "Default",
             "is_solo": true,
+            "is_space": true,
             "internal_name": "Hive Space",
             "internal_difficulty": "Advanced"
         }
@@ -54,7 +62,9 @@
             "name": "Bug Hunt",
             "difficulty": "Elite",
             "metric": "DPS",
+            "variant": "Default",
             "is_solo": true,
+            "is_space": false,
             "internal_name": "Bug Hunt",
             "internal_difficulty": "Elite"
         }
@@ -66,7 +76,9 @@
             "name": "Miner Instabilities",
             "difficulty": "Elite",
             "metric": "DPS",
+            "variant": "Default",
             "is_solo": true,
+            "is_space": false,
             "internal_name": "Miner Instabilities",
             "internal_difficulty": "Elite"
         }
@@ -78,7 +90,9 @@
             "name": "Jupiter Station Shoadown",
             "difficulty": "Elite",
             "metric": "DPS",
+            "variant": "Default",
             "is_solo": true,
+            "is_space": false,
             "internal_name": "Jupiter Station Showdown",
             "internal_difficulty": "Elite"
         }
@@ -90,7 +104,9 @@
             "name": "Operation Wolf",
             "difficulty": "Normal",
             "metric": "DPS",
+            "variant": "Default",
             "is_solo": true,
+            "is_space": false,
             "internal_name": "Operation Wolf",
             "internal_difficulty": "Normal"
         }

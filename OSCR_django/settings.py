@@ -89,22 +89,35 @@ WSGI_APPLICATION = "OSCR_django.wsgi.application"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_ROOT = BASE_DIR / "media"
+UPLOAD_ROOT = BASE_DIR / "uploads"
 
-if DEBUG:
+if os.environ.get("DB_PROVIDER", "sqlite") == "sqlite":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": BASE_DIR / os.path.join("sqlite3", "db.sqlite3"),
         }
     }
-else:
+elif os.environ.get("DB_PROVIDER") == "postgres":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("POSTGRES_DATABASE"),
+            "NAME": os.environ.get("POSTGRES_DB"),
             "USER": os.environ.get("POSTGRES_USER"),
             "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
             "HOST": os.environ.get("POSTGRES_HOST"),
+            "PORT": os.environ.get("POSTGRES_PORT"),
+        }
+    }
+elif os.environ.get("DB_PROVIDER") == "mariadb":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.environ.get("MARIADB_DATABASE"),
+            "USER": os.environ.get("MARIADB_USER"),
+            "PASSWORD": os.environ.get("MARIADB_PASSWORD"),
+            "HOST": os.environ.get("MARIADB_HOST"),
+            "PORT": os.environ.get("MARIADB_PORT"),
         }
     }
 

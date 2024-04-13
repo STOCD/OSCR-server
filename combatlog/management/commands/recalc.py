@@ -1,3 +1,5 @@
+""" Recalculate previously uploaded Combats """
+
 import logging
 
 from combatlog.models import CombatLog

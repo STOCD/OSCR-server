@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:16.2
+    restart: always
+    container_name: oscr-db
+    hostname: oscr-db
+    env_file: .env
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test: "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+      timeout: 30s
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT}:5432"
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oscr-server
+    hostname: oscr-server
+    restart: always
+    command: /opt/OSCR-server/entrypoint.sh
+    env_file: .env
+    volumes:
+      - ./:${OSCR_ROOT}:ro
+      - ${OSCR_STATICFILES}:${OSCR_ROOT}/staticfiles:rw
+      - ${OSCR_UPLOADS}:${OSCR_ROOT}/uploads:rw
+      - ${OSCR_DATA}:/opt/data:rw
+    working_dir: /opt/OSCR-server
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
