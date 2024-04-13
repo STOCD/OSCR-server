@@ -95,17 +95,18 @@ if os.environ.get("DB_PROVIDER", "sqlite") == "sqlite":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / os.path.join("data", "db.sqlite3"),
+            "NAME": BASE_DIR / os.path.join("sqlite3", "db.sqlite3"),
         }
     }
 elif os.environ.get("DB_PROVIDER") == "postgres":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("POSTGRES_DATABASE"),
+            "NAME": os.environ.get("POSTGRES_DB"),
             "USER": os.environ.get("POSTGRES_USER"),
             "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
             "HOST": os.environ.get("POSTGRES_HOST"),
+            "PORT": os.environ.get("POSTGRES_PORT"),
         }
     }
 elif os.environ.get("DB_PROVIDER") == "mariadb":

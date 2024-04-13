@@ -2,27 +2,20 @@ version: "3"
 
 services:
   db:
-    image: mariadb:10.11
+    image: postgres:16.2
     restart: always
     container_name: oscr-db
     hostname: oscr-db
     env_file: .env
     volumes:
-      - ./mysql-data:/var/lib/mysql
+      - ./db-data:/var/lib/postgresql/data
     healthcheck:
       interval: 30s
       retries: 3
-      test:
-        [
-          "CMD",
-          "healthcheck.sh",
-          "--su-mysql",
-          "--connect",
-          "--innodb_initialized"
-        ]
+      test: "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
       timeout: 30s
     ports:
-      - "127.0.0.1:${MARIADB_PORT}:3306"
+      - "127.0.0.1:${POSTGRES_PORT}:5432"
   server:
     build:
       context: .
