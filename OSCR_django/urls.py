@@ -34,6 +34,7 @@ urlpatterns = [
     path("", include("combatlog.urls.combatlog")),
     path("", include("ladder.urls.ladder")),
     path("", include("ladder.urls.ladder_entry")),
+    path("", include("ui.urls.ui")),
 ]
 
 if settings.ENABLE_DEBUG:
