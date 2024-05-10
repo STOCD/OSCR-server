@@ -157,6 +157,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 FORCE_SCRIPT_NAME = os.environ.get("FORCE_SCRIPT_NAME", "")
 STATIC_URL = FORCE_SCRIPT_NAME + os.environ.get("STATIC_URL", "/static/")
+if os.environ.get("WHITENOISE_STATIC_PREFIX"):
+    WHITENOISE_STATIC_PREFIX = os.environ.get("WHITENOISE_STATIC_PREFIX")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
