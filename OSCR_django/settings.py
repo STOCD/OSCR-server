@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     "django_filters",
+    "django_json_widget",
     # Our apps below here
     "user.apps.UserConfig",
     "combatlog.apps.CombatLogConfig",
