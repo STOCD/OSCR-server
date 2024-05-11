@@ -13,6 +13,7 @@ urlpatterns = [
     path(
         "ui/ladder-entries/",
         views.LadderEntryView.as_view(template_name="ladder_entry.html"),
+        name="ladder_entries",
     ),
     path(
         "ui/",
