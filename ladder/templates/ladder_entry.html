@@ -3,7 +3,7 @@
 {% load l10n %}
 {% load ladder %}
 {% load ladder_entry %}
-    <form action="/ui/ladder-entries/">
+    <form action="{{settings.FORCE_SCRIPT_NAME}}/ui/ladder-entries/">
         <div class="row" data-bs-theme="dark">
             <div class="col col-md-2">
                 <input type="text" class="form-control form-control-sm" id="inputPlayer" name="player__icontains" placeholder="player@handle" value="{{request.GET.player__icontains}}">
