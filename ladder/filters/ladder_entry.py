@@ -4,8 +4,9 @@ import decimal
 import logging
 
 import django_filters.rest_framework as filters
-from core.filters import BaseFilterSet
 from django.db.models import JSONField
+
+from core.filters import BaseFilterSet
 from ladder.models import LadderEntry
 
 LOGGER = logging.getLogger("django")
@@ -36,6 +37,7 @@ class LadderEntryFilter(BaseFilterSet):
             "ladder": ["exact"],
             "ladder__name": CHAR_FILTERS,
             "ladder__difficulty": CHAR_FILTERS,
+            "ladder__variant__name": CHAR_FILTERS,
             "ladder__is_solo": ["exact"],
         }
         filter_overrides = {

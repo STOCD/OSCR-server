@@ -1,0 +1,154 @@
+{% extends 'template.html' %}
+{% block 'content' %}
+{% load l10n %}
+{% load ladder %}
+{% load ladder_entry %}
+    <form action="/ui/ladder-entries/">
+        <div class="row" data-bs-theme="dark">
+            <div class="col col-md-2">
+                <input type="text" class="form-control form-control-sm" id="inputPlayer" name="player__icontains" placeholder="player@handle" value="{{request.GET.player__icontains}}">
+            </div>
+            <div class="col col-md-2">
+                <select name="ladder__name" id="inputMap" class="form-control form-control-sm">
+                    <option value="">All Ladders</option>
+                    {% ladder_names as names %}
+                    {% for name in names %}
+                        <option
+                            {% if request.GET.ladder__name == name %}
+                            selected
+                            {%else%}
+                            {%endif%}
+                            value="{{name}}">
+                        {{name}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col col-md-2">
+                <select name="ladder__variant__name" id="inputVariant" class="form-control form-control-sm">
+                    <option value="">All Variants</option>
+                    {% ladder_variants as variants %}
+                    {% for variant in variants %}
+                        <option
+                            {% if request.GET.ladder__variant__name == variant %}
+                            selected
+                            {%else%}
+                            {%endif%}
+                            value="{{variant}}">
+                        {{variant}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col col-md-2">
+                <select name="ladder__difficulty" id="inputDifficulty" class="form-control form-control-sm">
+                    <option value="">All Difficulties</option>
+                    {% ladder_difficulties as difficulties %}
+                    {% for difficulty in difficulties %}
+                        <option
+                            {% if request.GET.ladder__difficulty == difficulty %}
+                            selected
+                            {%else%}
+                            {%endif%}
+                            value="{{difficulty}}">
+                        {{difficulty}}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col col-md-2">
+                <select name="ladder__is_solo" id="inputDifficulty" class="form-control form-control-sm">
+                    <option value="">All Group Sizes</option>
+                    <option
+                        {% if request.GET.ladder__is_solo == "1" %}
+                        selected
+                        {%else%}
+                        {%endif%}
+                        value="1">Solo</option>
+                    <option
+                        {% if request.GET.ladder__is_solo == "0" %}
+                        selected
+                        {%else%}
+                        {%endif%}
+                        value="0">2+ Players</option>
+                </select>
+            </div>
+            <div class="col col-md-2">
+                <button type="submit" class="btn btn-primary btn-sm float-end">Search</button>
+            </div>
+        </div>
+        <div data-bs-theme="dark">
+            <table class="table table-dark table-hover table-sm table-responsive">
+                <thead>
+                    <tr scope="row">
+                        <th scope="col">Rank</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Player</th>
+                        <th scope="col">Variant</th>
+                        <th scope="col">Map</th>
+                        <th scope="col">Difficulty</th>
+                        <th scope="col">DPS</th>
+                        <th scope="col">Damage</th>
+                        <th scope="col">Combat Time</th>
+                        <th scope="col">Build</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entry in ladderentry_list %}
+                    <tr scope="row">
+                        <td>{{entry|rank}}</td>
+                        <td>{{entry.combatlog.metadata.date_time|date:"DATE_FORMAT"}}</td>
+                        <td>{{entry.player}}</td>
+                        <td>{{entry.ladder.variant.name}}</td>
+                        <td>{{entry.ladder.name}}</td>
+                        <td>{{entry.ladder.difficulty}}</td>
+                        <td>{{entry.data.DPS|floatformat:0|localize}}</td>
+                        <td>{{entry.data.total_damage|floatformat:0|localize}}</td>
+                        <td>{{entry.data.combat_time|floatformat:0|localize}}</td>
+                        <td>{{entry.data.build}}</td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="row" data-bs-theme="dark">
+            <div class="col">
+                <nav aria-label="" class="float-end">
+                  <ul class="pagination pagination-sm">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <button name="page" value="{{ page_obj.previous_page_number }}" type="submit" class="page-link" aria-label="Previous">
+                               <span aria-hidden="true">&laquo;</span>
+                            </button>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <button type="submit" class="page-link" aria-label="Previous">
+                               <span aria-hidden="true">&laquo;</span>
+                            </button>
+                        </li>
+                   {% endif %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">
+                            Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+                        </a>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <button name="page" value="{{ page_obj.next_page_number }}" type="submit" class="page-link" aria-label="Next">
+                               <span aria-hidden="true">&raquo;</span>
+                            </button>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <button type="submit" class="page-link" aria-label="Next">
+                               <span aria-hidden="true">&raquo;</span>
+                            </button>
+                        </li>
+                   {% endif %}
+                  </ul>
+                </nav>
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -5,15 +5,15 @@ import os
 import tempfile
 from pathlib import Path
 
-from core.models import BaseModel
+import OSCR
 from django.conf import settings
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils import timezone
-from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
 
-import OSCR
+from core.models import BaseModel
+from ladder.models import Ladder, LadderEntry
 
 from .metadata import Metadata
 

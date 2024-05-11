@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     "django_filters",
+    "django_json_widget",
     # Our apps below here
     "user.apps.UserConfig",
     "combatlog.apps.CombatLogConfig",
@@ -209,3 +210,12 @@ REST_FRAMEWORK = {
 # For proxy forwarding.
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+
+# For Template Formatting
+USE_L10N = True
+USE_THOUSAND_SEPARATOR = True
+
+# Custom Paths
+ADMIN_PATH = os.environ.get("ADMIN_PATH", False)
+SWAGGER_PATH = os.environ.get("SWAGGER_PATH", False)

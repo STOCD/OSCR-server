@@ -3,10 +3,12 @@
 import logging
 
 from django import template
+
 from ladder.models import Ladder
 
 register = template.Library()
 LOGGER = logging.getLogger("django")
+
 
 @register.simple_tag
 def get_ladders():

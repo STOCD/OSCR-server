@@ -1,0 +1,25 @@
+{% load ladder %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="{% static 'js/jquery.slim.min.js' %}"></script>
+        <!-- <script src="{% static 'js/popper.min.js' %}"></script> -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+        <title>OSCR | Open Source Combatlog Reader</title>
+    </head>
+    <body>
+        <div class="ui-container">
+            <div>
+                <a href="/ui/"><img src="{% static 'img/oscrbanner-slim-dark-label.png' %}" class='banner'></img></a>
+            </div>
+            <div class="ui-content content-background">
+                {% block 'content' %}
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>
