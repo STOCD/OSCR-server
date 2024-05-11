@@ -18,5 +18,6 @@ urlpatterns = [
     path(
         "ui/",
         views.LadderEntryView.as_view(template_name="ladder_entry.html"),
+        name="ui",
     ),
 ]
