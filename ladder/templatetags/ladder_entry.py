@@ -1,6 +1,7 @@
 """Custom Template Tags for Ladder Entries"""
 
 from django import template
+
 from ladder.models import Ladder, LadderEntry
 
 register = template.Library()
