@@ -13,7 +13,7 @@
     <body>
         <div class="ui-container">
             <div>
-                <a href="/ui/"><img src="{% static 'img/oscrbanner-slim-dark-label.png' %}" class='banner'></img></a>
+                <a href="{% url 'ui' %}"><img src="{% static 'img/oscrbanner-slim-dark-label.png' %}" class='banner'></img></a>
             </div>
             <div class="ui-content content-background">
                 {% block 'content' %}
