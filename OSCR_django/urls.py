@@ -37,6 +37,8 @@ urlpatterns = [
     path("", include("ui.urls.ui")),
 ]
 
-if settings.ENABLE_DEBUG:
-    urlpatterns.append(path("admin/", admin.site.urls))
-    urlpatterns.append(path("swagger/", schema_view.with_ui("swagger")))
+if settings.ADMIN_PATH:
+    urlpatterns.append(path(settings.ADMIN_PATH, admin.site.urls))
+
+if settings.SWAGGER_PATH:
+    urlpatterns.append(path(settings.SWAGGER_PATH, schema_view.with_ui("swagger")))

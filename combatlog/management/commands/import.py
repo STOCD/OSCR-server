@@ -5,9 +5,10 @@ import logging
 import os
 from pathlib import Path
 
-from combatlog.models import CombatLog
 from django.core.management.base import BaseCommand
 from django.db import transaction
+
+from combatlog.models import CombatLog
 
 LOGGER = logging.getLogger("django")
 

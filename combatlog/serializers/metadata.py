@@ -1,7 +1,8 @@
 """ Metadata Serializers """
 
-from combatlog.models import Metadata
 from rest_framework import serializers
+
+from combatlog.models import Metadata
 
 
 class MetadataSerializer(serializers.ModelSerializer):

@@ -2,8 +2,9 @@
 
 import logging
 
-from combatlog.models import CombatLog
 from django.core.management.base import BaseCommand
+
+from combatlog.models import CombatLog
 
 LOGGER = logging.getLogger("django")
 

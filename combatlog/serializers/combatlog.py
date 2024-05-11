@@ -1,7 +1,8 @@
 """ CombatLog Serializers """
 
-from combatlog.models import CombatLog
 from rest_framework import serializers
+
+from combatlog.models import CombatLog
 
 from .metadata import MetadataSerializer
 

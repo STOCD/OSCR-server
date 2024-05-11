@@ -3,6 +3,8 @@ html, body {
     margin: 0;
     padding: 0;
     max-height: 100vh;
+    font-family: sans-serif;
+    color: white;
 }
 
 .banner {
@@ -14,15 +16,58 @@ html, body {
     color: #ffffff;
 }
 
-.container {
+.ui-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-.content {
+.ui-content {
     margin: .5rem;
     padding: .5rem;
     flex: 1;
     border-radius: .5rem;
 }
+
+table, td, tr, th {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+.btn-primary {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border-color: #c82934 !important;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+    border-color: #c82934 !important;
+}
+
+.form-control {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border-color: #c82934 !important;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 .25rem rgba(200, 41, 52, .25);
+}
+
+.pagination > li > button {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border-color: #c82934 !important;
+}
+
+.pagination > li > a {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border-color: #c82934 !important;
+}
+
+.pagination > li > button:focus {
+    display: inline-flex;
+    box-shadow: 0 0 0 .25rem rgba(200, 41, 52, .25);
+}
+

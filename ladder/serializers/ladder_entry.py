@@ -1,7 +1,8 @@
 """ LadderEntry Serializers """
 
-from ladder.models import LadderEntry
 from rest_framework import serializers
+
+from ladder.models import LadderEntry
 
 
 class LadderEntrySerializer(serializers.ModelSerializer):

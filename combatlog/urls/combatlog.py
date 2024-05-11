@@ -1,8 +1,9 @@
 """ CombatLog URLs """
 
-from combatlog import views
 from django.urls import include, path
 from rest_framework import routers
+
+from combatlog import views
 
 router = routers.DefaultRouter()
 router.register("combatlog", views.CombatLogViewSet)
