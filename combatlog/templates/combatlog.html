@@ -1,0 +1,48 @@
+{% extends 'template.html' %}
+{% block 'content' %}
+{% load l10n %}
+{% load static %}
+<div data-bs-theme="dark">
+    <h2 style="display: inline-block;">{{object.metadata.map}} {% if object.metadata.difficulty is not None %}({{object.metadata.difficulty}}){% endif %}</h2>&nbsp;
+    <h5 style="display: inline-block;">{{object.metadata.date_time|date:"DATETIME_FORMAT"}}</h5>
+    <div class="float-end"><img src="{% static 'img/download.svg' %}" data-toggle="tooltip" data-placement="top" title="Download"></img></div>
+    <hr>
+    <table class="table table-dark table-hover table-sm table-responsive">
+        <thead>
+            <tr scope="row">
+                <th scope="col">Player</th>
+                <th scope="col">Time</th>
+                <th scope="col">DPS</th>
+                <th scope="col">Total Damage</th>
+                <th scope="col">Debuff</th>
+                <th scope="col">Attacks-in Share</th>
+                <th scope="col">Taken Damage Share</th>
+                <th scope="col">Max One Hit</th>
+                <th scope="col">Deaths</th>
+                <th scope="col">Build</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for x, player in object.metadata.summary %}
+            <tr scope="row">
+                <td scople="col">{{player.name}}{{player.handle}}</td>
+                <td scople="col">{{player.combat_time|floatformat:0|localize}}s</td>
+                <td scople="col">{{player.DPS|floatformat:0}}</td>
+                <td scople="col">{{player.total_damage|floatformat:0}}</td>
+                <td scople="col">{{player.debuff|floatformat:2}}%</td>
+                <td scople="col">{{player.attacks_in_share|floatformat:2}}%</td>
+                <td scople="col">{{player.taken_damage_share|floatformat:2}}%</td>
+                <td scople="col">{{player.max_one_hit|floatformat:0|localize}}</td>
+                <td scople="col">{{player.deaths|floatformat:0}}</td>
+                <td scople="col">{{player.build}}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% if object.youtube is not None %}
+        <div class="ratio ratio-16x9">
+            <iframe src="https://www.youtube.com/embed/{{object.youtube}}" class="ratio ratio-16x9"></iframe>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -11,11 +11,11 @@
         <title>OSCR | Open Source Combatlog Reader</title>
     </head>
     <body>
-        <div class="ui-container">
+        <div class="ui-container container-fluid g-0">
             <div>
                 <a href="{% url 'ui' %}"><img src="{% static 'img/oscrbanner-slim-dark-label.png' %}" class='banner'></img></a>
             </div>
-            <div class="ui-content content-background">
+            <div class="flex ui-content content-background">
                 {% block 'content' %}
                 {% endblock %}
             </div>

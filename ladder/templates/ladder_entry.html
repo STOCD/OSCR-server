@@ -1,6 +1,7 @@
 {% extends 'template.html' %}
 {% block 'content' %}
 {% load l10n %}
+{% load static %}
 {% load ladder %}
 {% load ladder_entry %}
     <form action="{% url 'ladder_entries' %}">
@@ -77,6 +78,7 @@
                 <button type="submit" class="btn btn-primary btn-sm float-end">Search</button>
             </div>
         </div>
+        <hr>
         <div data-bs-theme="dark">
             <table class="table table-dark table-hover table-sm table-responsive">
                 <thead>
@@ -89,8 +91,10 @@
                         <th scope="col">Difficulty</th>
                         <th scope="col">DPS</th>
                         <th scope="col">Damage</th>
-                        <th scope="col">Combat Time</th>
+                        <th scope="col">Time</th>
                         <th scope="col">Build</th>
+                        <th scope="col">Group Size</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -101,17 +105,46 @@
                         <td>{{entry.player}}</td>
                         <td>{{entry.ladder.variant.name}}</td>
                         <td>{{entry.ladder.name}}</td>
-                        <td>{{entry.ladder.difficulty}}</td>
+                        <td>
+                            {% if entry.ladder.difficulty == "Elite" %}
+                                <img src="{% static 'img/18px-TFO_elite_icon.png' %}"></img>&nbsp;Elite
+                            {% elif entry.ladder.difficulty == "Advanced" %}
+                                <img src="{% static 'img/18px-TFO_advanced_icon.png' %}"></img>&nbsp;Advanced
+                            {% elif entry.ladder.difficulty == "Normal" %}
+                                <img src="{% static 'img/18px-TFO_normal_icon.png' %}"></img>&nbsp;Normal
+                            {% elif entry.ladder.difficulty is None %}
+                                <img src="{% static 'img/18px-TFO_normal_icon.png' %}"></img>&nbsp;Any
+                            {% else %}
+                            {{entry.ladder.difficulty}}
+                            {% endif %}
+                        </td>
                         <td>{{entry.data.DPS|floatformat:0|localize}}</td>
                         <td>{{entry.data.total_damage|floatformat:0|localize}}</td>
-                        <td>{{entry.data.combat_time|floatformat:0|localize}}</td>
+                        <td>{{entry.data.combat_time|floatformat:0|localize}}s</td>
                         <td>{{entry.data.build}}</td>
+                        <td>
+                            {% if entry.ladder.is_solo %}
+                            Solo
+                            {% else %}
+                            2+ Players
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'combatlog' entry.combatlog.pk %}" target="_blank"><img src="{% static 'img/info.svg' %}" data-toggle="tooltip" data-placement="top" title="Details"></img></a>
+                            {% if entry.combatlog.youtube %}
+                                <a href="https://www.youtube.com/watch/{{entry.combatlog.youtube}}" target="_blank">
+                                    <img src="{% static 'img/youtube.svg' %}" data-toggle="tooltip" data-placement="top" title="Youtube"></img>
+                                </a>
+                            {% else %}
+                                <img src="{% static 'img/youtube.svg' %}" data-toggle="tooltip" data-placement="top" title="Youtube" class="invisible"></img>
+                            {% endif %}
+                        </td>
                     </tr>
                 </tbody>
                 {% endfor %}
             </table>
         </div>
-        <div class="row" data-bs-theme="dark">
+        <div data-bs-theme="dark">
             <div class="col">
                 <nav aria-label="" class="float-end">
                   <ul class="pagination pagination-sm">
