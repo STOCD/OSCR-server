@@ -30,6 +30,7 @@ class CombatLog(BaseModel):
     )
 
     name = models.TextField(null=True, default=None)
+    youtube = models.TextField(null=True, default=None)
 
     def update_metadata_from_remote(self):
         """Updates Metadata from remote storage"""

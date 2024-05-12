@@ -2,8 +2,14 @@
 
 import logging
 
+from combatlog.models import CombatLog
+from combatlog.serializers import (CombatLogSerializer,
+                                   CombatLogUploadResponseSerializer,
+                                   CombatLogUploadSerializer)
+from core.pagination import PageNumberPagination
 from django.db import transaction
 from django.http import HttpResponse
+from django.views.generic.detail import DetailView
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
@@ -11,14 +17,6 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-
-from combatlog.models import CombatLog
-from combatlog.serializers import (
-    CombatLogSerializer,
-    CombatLogUploadResponseSerializer,
-    CombatLogUploadSerializer,
-)
-from core.pagination import PageNumberPagination
 
 LOGGER = logging.getLogger("django")
 
@@ -91,3 +89,9 @@ class CombatLogViewSet(
         response["Content-Transfer-Encoding"] = "binary"
         response.write(data)
         return response
+
+
+class CombatLogDetailView(DetailView):
+    """Combat Log Detail View"""
+
+    model = CombatLog

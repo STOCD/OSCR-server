@@ -49,4 +49,4 @@ class LadderEntryView(FilterView):
     filter_backends = (BaseFilterBackend, OrderingFilter)
     filterset_class = LadderEntryFilter
     ordering = "-data__DPS"
-    paginate_by = 20
+    paginate_by = 15
