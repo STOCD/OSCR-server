@@ -16,8 +16,16 @@
                 <a href="{% url 'ui' %}"><img src="{% static 'img/oscrbanner-slim-dark-label.png' %}" class='banner'></img></a>
             </div>
             <div class="flex ui-content content-background">
-                {% block 'content' %}
-                {% endblock %}
+                <div class="row">
+                    {% block 'content' %}
+                    {% endblock %}
+                <div class="col d-flex justify-content-center">
+                    <span class="m-1"><a href="https://github.com/STOCD/OSCR-UI/releases" target="_blank" class="link-light link-underline-opacity-25">Download OSCR</a></span>
+                    <span class="m-1">|</span>
+                    <span class="m-1"><a href="https://github.com/STOCD" target="_blank" class="link-light link-underline-opacity-25">STOCD Github</a></span>
+                    <span class="m-1">|</span>
+                    <span class="m-1"><a href="https://discord.gg/stobuilds" target="_blank" class="link-light link-underline-opacity-25">STOBuilds Discord</a></span>
+                </div>
             </div>
         </div>
     </body>
