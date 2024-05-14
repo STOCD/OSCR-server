@@ -45,11 +45,24 @@
         "pk": "Season 31 - Both Worlds",
         "fields": {
             "start_date": "2024-02-15T12:00:00+00:00",
-            "end_date": "2099-12-31T23:59:59+00:00",
+            "end_date": "2024-5-27T23:59:59+00:00",
             "is_ground_variant": true,
             "is_space_variant": true,
             "exclude_space": [
                 "Season 31 (pre-Flagship Staffing fix)"
+            ],
+            "exclude_ground": []
+        }
+    },
+    {
+        "model": "ladder.Variant",
+        "pk": "Season 32 - Unparalleled",
+        "fields": {
+            "start_date": "2024-05-18T12:00:00+00:00",
+            "end_date": "2099-12-31T23:59:59+00:00",
+            "is_ground_variant": true,
+            "is_space_variant": true,
+            "exclude_space": [
             ],
             "exclude_ground": []
         }
