@@ -21,6 +21,7 @@ class LadderEntryAdmin(admin.ModelAdmin):
         "damage",
         "combat_time",
         "build",
+        "visible",
     ]
     formfield_overrides = {
         JSONField: {"widget": JSONEditorWidget},
@@ -53,3 +54,7 @@ class LadderEntryAdmin(admin.ModelAdmin):
     @admin.display(ordering="data__build")
     def build(self, obj):
         return obj.data.get("build")
+
+    @admin.display(ordering="visible")
+    def visible(self, obj):
+        return obj.data.get("visible")

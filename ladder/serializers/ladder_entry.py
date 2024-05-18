@@ -23,4 +23,4 @@ class LadderEntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LadderEntry
-        fields = "__all__"
+        exclude = ["visible"]

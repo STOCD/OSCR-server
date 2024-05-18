@@ -10,7 +10,8 @@
             "is_solo": false,
             "is_space": true,
             "internal_name": "Infected Space",
-            "internal_difficulty": "Elite"
+            "internal_difficulty": "Elite",
+            "manual_review_threshold": 2000000
         }
     },
     {

@@ -124,6 +124,13 @@ class CombatLog(BaseModel):
                 if ladder.is_solo and len(players) != 1:
                     continue
 
+                if ladder.manual_review_threshold:
+                    visible = player.get(ladder.metric) < ladder.manual_review_threshold
+                    manual_review = ", but result needs to be manually reviewed."
+                else:
+                    visible = True
+                    manual_review = ""
+
                 queryset = LadderEntry.objects.filter(
                     ladder=ladder,
                     player=full_name,
@@ -132,7 +139,7 @@ class CombatLog(BaseModel):
                     result = {
                         "name": full_name,
                         "updated": True,
-                        "detail": f"New entry for {full_name} on {ladder}",
+                        "detail": f"New entry for {full_name} on {ladder}{manual_review}",
                         "value": player.get(ladder.metric),
                     }
                     LadderEntry.objects.create(
@@ -140,6 +147,7 @@ class CombatLog(BaseModel):
                         data=player,
                         combatlog=self,
                         ladder=ladder,
+                        visible=visible,
                     )
                 elif not queryset.filter(
                     **{f"data__{ladder.metric}__gte": player.get(ladder.metric)}
@@ -147,7 +155,7 @@ class CombatLog(BaseModel):
                     result = {
                         "name": full_name,
                         "updated": True,
-                        "detail": f"Updated entry for {full_name} on {ladder}",
+                        "detail": f"Updated entry for {full_name} on {ladder}{manual_review}",
                         "value": player.get(ladder.metric),
                     }
                     queryset.update(
@@ -155,6 +163,7 @@ class CombatLog(BaseModel):
                         data=player,
                         combatlog=self,
                         ladder=ladder,
+                        visible=visible,
                     )
                 else:
                     result = {

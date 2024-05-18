@@ -16,6 +16,8 @@ class LadderEntry(BaseModel):
     combatlog = models.ForeignKey("combatlog.CombatLog", on_delete=models.CASCADE)
     ladder = models.ForeignKey(Ladder, on_delete=models.CASCADE)
 
+    visible = models.BooleanField(default=True)
+
     def __str__(self):
         return f"{self.player} | {self.ladder.name} ({self.ladder.difficulty}, {self.ladder.variant.name}) - {self.data['DPS']:,.0f} DPS"
 

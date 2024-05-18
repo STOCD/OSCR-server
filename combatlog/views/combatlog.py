@@ -2,11 +2,6 @@
 
 import logging
 
-from combatlog.models import CombatLog
-from combatlog.serializers import (CombatLogSerializer,
-                                   CombatLogUploadResponseSerializer,
-                                   CombatLogUploadSerializer)
-from core.pagination import PageNumberPagination
 from django.db import transaction
 from django.http import HttpResponse
 from django.views.generic.detail import DetailView
@@ -17,6 +12,14 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+
+from combatlog.models import CombatLog
+from combatlog.serializers import (
+    CombatLogSerializer,
+    CombatLogUploadResponseSerializer,
+    CombatLogUploadSerializer,
+)
+from core.pagination import PageNumberPagination
 
 LOGGER = logging.getLogger("django")
 
