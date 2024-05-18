@@ -23,7 +23,7 @@ class LadderEntryViewSet(
 ):
     """LadderEntry API"""
 
-    queryset = LadderEntry.objects.all()
+    queryset = LadderEntry.objects.filter(visible=True)
     serializer_class = LadderEntrySerializer
     pagination_class = PageNumberPagination
     filter_backends = (BaseFilterBackend, OrderingFilter)
@@ -50,3 +50,25 @@ class LadderEntryView(FilterView):
     filterset_class = LadderEntryFilter
     ordering = "-data__DPS"
     paginate_by = 15
+
+    def get_queryset(self):
+        """Custom Queryset - Hide unverified results"""
+        if self.queryset is not None:
+            queryset = self.queryset
+            if isinstance(queryset, QuerySet):
+                queryset = queryset.all()
+        elif self.model is not None:
+            queryset = self.model._default_manager.all()
+        else:
+            raise ImproperlyConfigured(
+                "%(cls)s is missing a QuerySet. Define "
+                "%(cls)s.model, %(cls)s.queryset, or override "
+                "%(cls)s.get_queryset()." % {"cls": self.__class__.__name__}
+            )
+        ordering = self.get_ordering()
+        if ordering:
+            if isinstance(ordering, str):
+                ordering = (ordering,)
+            queryset = queryset.order_by(*ordering)
+
+        return queryset.filter(visible=True)
