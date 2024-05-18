@@ -19,4 +19,5 @@ class LadderSerializer(serializers.ModelSerializer):
         exclude = [
             "internal_name",
             "internal_difficulty",
+            "manual_review_threshold",
         ]

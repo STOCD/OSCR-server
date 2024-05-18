@@ -24,6 +24,8 @@ class Ladder(BaseModel):
     internal_name = models.TextField()
     internal_difficulty = models.TextField(null=True, default=None)
 
+    manual_review_threshold = models.IntegerField(default=0)
+
     def create_variant(self, variant):
         """Create variant of ladder"""
         if not Ladder.objects.filter(
