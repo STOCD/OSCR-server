@@ -124,7 +124,7 @@ class CombatLog(BaseModel):
                 if ladder.is_solo and len(players) != 1:
                     continue
 
-                if player.get(ladder.metric) > ladder.manual_review_threshold:
+                if ladder.manual_review_threshold and player.get(ladder.metric) > ladder.manual_review_threshold:
                     visible = False
                     manual_review = f", but result needs to be manually reviewed. Combat Log ID #{self.pk}"
                 else:
