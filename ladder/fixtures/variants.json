@@ -58,7 +58,7 @@
         "model": "ladder.Variant",
         "pk": "Season 32 - Unparalleled",
         "fields": {
-            "start_date": "2024-05-18T12:00:00+00:00",
+            "start_date": "2024-05-28T12:00:00+00:00",
             "end_date": "2099-12-31T23:59:59+00:00",
             "is_ground_variant": true,
             "is_space_variant": true,
