@@ -89,7 +89,7 @@
         "pk": 1007,
         "fields": {
             "name": "Jupiter Station Showdown",
-            "difficulty": "Elite",
+            "difficulty": null,
             "metric": "DPS",
             "variant": "Default",
             "is_solo": true,
