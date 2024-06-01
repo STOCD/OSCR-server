@@ -82,6 +82,11 @@ class CombatLog(BaseModel):
             internal_difficulty=combat.difficulty,
             variant__start_date__lte=combat.start_time,
             variant__end_date__gt=combat.end_time,
+        ) | Ladder.objects.filter(
+            internal_name=combat.map,
+            internal_difficulty=None,
+            variant__start_date__lte=combat.start_time,
+            variant__end_date__gt=combat.end_time,
         )
 
         # Now need to apply exclusions
@@ -124,7 +129,10 @@ class CombatLog(BaseModel):
                 if ladder.is_solo and len(players) != 1:
                     continue
 
-                if ladder.manual_review_threshold and player.get(ladder.metric) > ladder.manual_review_threshold:
+                if (
+                    ladder.manual_review_threshold
+                    and player.get(ladder.metric) > ladder.manual_review_threshold
+                ):
                     visible = False
                     manual_review = f", but result needs to be manually reviewed. Combat Log ID #{self.pk}"
                 else:

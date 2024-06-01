@@ -2,6 +2,8 @@
 
 import logging
 
+from django.core.exceptions import ImproperlyConfigured
+from django.db.models.query import QuerySet
 from django_filters.views import FilterView
 from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
