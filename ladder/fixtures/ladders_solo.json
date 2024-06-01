@@ -111,5 +111,19 @@
             "internal_name": "Operation Wolf",
             "internal_difficulty": "Normal"
         }
+    },
+    {
+        "model": "ladder.Ladder",
+        "pk": 1009,
+        "fields": {
+            "name": "Nukara Prime: Transdimensional Tactics",
+            "difficulty": null,
+            "metric": "DPS",
+            "variant": "Default",
+            "is_solo": false,
+            "is_space": false,
+            "internal_name": "Nukara Prime: Transdimensional Tactics",
+            "internal_difficulty": null
+        }
     }
 ]
