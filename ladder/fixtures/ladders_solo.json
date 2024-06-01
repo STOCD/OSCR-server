@@ -61,7 +61,7 @@
         "pk": 1005,
         "fields": {
             "name": "Bug Hunt",
-            "difficulty": "Elite",
+            "difficulty": null,
             "metric": "DPS",
             "variant": "Default",
             "is_solo": true,
@@ -75,7 +75,7 @@
         "pk": 1006,
         "fields": {
             "name": "Miner Instabilities",
-            "difficulty": "Elite",
+            "difficulty": null,
             "metric": "DPS",
             "variant": "Default",
             "is_solo": true,
@@ -89,7 +89,7 @@
         "pk": 1007,
         "fields": {
             "name": "Jupiter Station Showdown",
-            "difficulty": "Elite",
+            "difficulty": null,
             "metric": "DPS",
             "variant": "Default",
             "is_solo": true,
@@ -103,13 +103,27 @@
         "pk": 1008,
         "fields": {
             "name": "Operation Wolf",
-            "difficulty": "Normal",
+            "difficulty": null,
             "metric": "DPS",
             "variant": "Default",
             "is_solo": true,
             "is_space": false,
             "internal_name": "Operation Wolf",
             "internal_difficulty": "Normal"
+        }
+    },
+    {
+        "model": "ladder.Ladder",
+        "pk": 1009,
+        "fields": {
+            "name": "Nukara Prime: Transdimensional Tactics",
+            "difficulty": null,
+            "metric": "DPS",
+            "variant": "Default",
+            "is_solo": false,
+            "is_space": false,
+            "internal_name": "Nukara Prime: Transdimensional Tactics",
+            "internal_difficulty": null
         }
     }
 ]
