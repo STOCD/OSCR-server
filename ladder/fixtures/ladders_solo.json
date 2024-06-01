@@ -61,7 +61,7 @@
         "pk": 1005,
         "fields": {
             "name": "Bug Hunt",
-            "difficulty": "Elite",
+            "difficulty": null,
             "metric": "DPS",
             "variant": "Default",
             "is_solo": true,
@@ -75,7 +75,7 @@
         "pk": 1006,
         "fields": {
             "name": "Miner Instabilities",
-            "difficulty": "Elite",
+            "difficulty": null,
             "metric": "DPS",
             "variant": "Default",
             "is_solo": true,
@@ -103,7 +103,7 @@
         "pk": 1008,
         "fields": {
             "name": "Operation Wolf",
-            "difficulty": "Normal",
+            "difficulty": null,
             "metric": "DPS",
             "variant": "Default",
             "is_solo": true,
