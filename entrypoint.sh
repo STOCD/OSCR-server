@@ -14,5 +14,5 @@ set -e
     # Generate the ladder variants.
     python3 manage.py genladders
 
-    gunicorn --workers ($(nproc) * 4) -t 0 --bind 0.0.0.0:8000 OSCR_django.wsgi:application
+    gunicorn --workers $(($(nproc) * 4)) -t 0 --bind 0.0.0.0:8000 OSCR_django.wsgi:application
 )
