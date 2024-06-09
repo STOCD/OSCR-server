@@ -26,10 +26,10 @@ CHAR_FILTERS = [
 
 
 class LadderEntryFilter(BaseFilterSet):
-    """Filter for Tasks API"""
+    """Filter for model"""
 
     class Meta:
-        """Meta class for the application filter"""
+        """Meta class for filter"""
 
         model = LadderEntry
         fields = {

@@ -1,4 +1,4 @@
-""" Ladder Views """
+""" Variant Views """
 
 import logging
 
@@ -8,24 +8,24 @@ from rest_framework.viewsets import GenericViewSet
 
 from core.filters import BaseFilterBackend
 from core.pagination import AllResultsPagination
-from ladder.filters import LadderFilter
-from ladder.models import Ladder
-from ladder.serializers import LadderSerializer
+from ladder.filters import VariantFilter
+from ladder.models import Variant
+from ladder.serializers import VariantSerializer
 
 LOGGER = logging.getLogger("django")
 
 
-class LadderViewSet(
+class VariantViewSet(
     GenericViewSet,
     ListModelMixin,
     RetrieveModelMixin,
 ):
-    """Ladder API"""
+    """Variant API"""
 
-    queryset = Ladder.objects.all()
-    serializer_class = LadderSerializer
+    queryset = Variant.objects.all()
+    serializer_class = VariantSerializer
     pagination_class = AllResultsPagination
     filter_backends = (BaseFilterBackend, OrderingFilter, SearchFilter)
-    filterset_class = LadderFilter
+    filterset_class = VariantFilter
     ordering_fields = "__all__"
-    ordering = ["variant__name", "id"]
+    ordering = ["name"]

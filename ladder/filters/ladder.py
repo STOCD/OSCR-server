@@ -5,10 +5,10 @@ from ladder.models import Ladder
 
 
 class LadderFilter(BaseFilterSet):
-    """Filter for Tasks API"""
+    """Filter for model"""
 
     class Meta:
-        """Meta class for the application filter"""
+        """Meta class for filter"""
 
         model = Ladder
         exclude = [
