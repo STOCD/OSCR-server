@@ -63,6 +63,8 @@ python3 manage.py generate_swagger -f yaml -u http://127.0.0.1 api-spec.yaml
 
 ```bash
 openapi-generator-cli generate -g python -o client -i api-spec.yaml \
-    --additional-properties=packageName=OSCR_django_client,packageVersion=1.0.0
-cd client && python3 -m twine upload dist/*
+    --additional-properties=packageName=OSCR_django_client,packageVersion=$(cat VERSION)
+cd client
+python3 -m build .
+python3 -m twine upload dist/*
 ```
