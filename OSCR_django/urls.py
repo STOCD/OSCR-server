@@ -34,6 +34,7 @@ urlpatterns = [
     path("", include("combatlog.urls.combatlog")),
     path("", include("ladder.urls.ladder")),
     path("", include("ladder.urls.ladder_entry")),
+    path("", include("ladder.urls.variant")),
     path("", include("ui.urls.ui")),
 ]
 
