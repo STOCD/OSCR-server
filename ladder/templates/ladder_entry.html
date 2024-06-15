@@ -100,7 +100,7 @@
                 <tbody>
                 {% for entry in ladderentry_list %}
                     <tr scope="row">
-                        <td>{{entry|rank}}</td>
+                        <td>{% rank entry request %}</td>
                         <td>{{entry.combatlog.metadata.date_time|date:"DATE_FORMAT"}}</td>
                         <td>{{entry.player}}</td>
                         <td>{{entry.ladder.variant.name}}</td>
