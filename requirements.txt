@@ -2,10 +2,9 @@ Django==4.2.9
 djangorestframework==3.14.0
 drf_yasg==1.21.7
 django_filter==23.5
-STO-OSCR>=2024.5b120
+STO-OSCR>=2024.7b90
 whitenoise==6.6.0
 psycopg[binary,pool]==3.1.18
-mysqlclient==2.2.4
 requests>=2.31.0
 django-json-widget>=2.0.1
 
