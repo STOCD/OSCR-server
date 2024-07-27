@@ -83,6 +83,7 @@
             <table class="table table-dark table-hover table-sm table-responsive">
                 <thead>
                     <tr scope="row">
+                        <th scope="col">Result</th>
                         <th scope="col">Rank</th>
                         <th scope="col">Date</th>
                         <th scope="col">Player</th>
@@ -101,6 +102,7 @@
                 {% for entry in ladderentry_list %}
                     <tr scope="row">
                         <td>{% rank entry request %}</td>
+                        <td>{% ladder_rank entry request %}</td>
                         <td>{{entry.combatlog.metadata.date_time|date:"DATE_FORMAT"}}</td>
                         <td>{{entry.player}}</td>
                         <td>{{entry.ladder.variant.name}}</td>

@@ -1,4 +1,4 @@
-""" Ladder Views """
+"""Ladder Views"""
 
 import logging
 

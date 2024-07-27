@@ -27,6 +27,17 @@ def rank(obj, request):
 
 
 @register.simple_tag
+def ladder_rank(obj, request):
+    """Return the ladder entry's rank"""
+    key = f"data__{obj.ladder.metric}__gt"
+    flt = {key: obj.data.get(obj.ladder.metric, 0)}
+    return (
+        LadderEntry.objects.filter(ladder=obj.ladder).filter(visible=True).filter(**flt).count()
+        + 1
+    )
+
+
+@register.simple_tag
 def ladder_variants():
     """Return the list of ladder variants"""
     return Ladder.objects.values_list("variant", flat=True).distinct()
