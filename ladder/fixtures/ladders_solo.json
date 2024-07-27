@@ -120,7 +120,7 @@
             "difficulty": null,
             "metric": "DPS",
             "variant": "Default",
-            "is_solo": false,
+            "is_solo": true,
             "is_space": false,
             "internal_name": "Nukara Prime: Transdimensional Tactics",
             "internal_difficulty": null
