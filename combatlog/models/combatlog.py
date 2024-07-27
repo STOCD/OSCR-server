@@ -47,7 +47,7 @@ class CombatLog(BaseModel):
         parser.analyze_log_file()
 
         # Only look at the first combat for now.
-        parser.shallow_combat_analysis(0)
+        parser.full_combat_analysis(0)
         combat = parser.active_combat
 
         players = {}
