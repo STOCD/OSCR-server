@@ -14,7 +14,8 @@ def summary(instance):
     """Return a summary of the combat log"""
     res = []
     res.append(instance.metadata.map)
-    res.append(instance.metadata.difficulty)
+    res.append(f"{instance.metadata.difficulty} Difficulty")
+    res.append("DPS")
     for _, player in instance.metadata.summary:
         res.append(f"{player['handle']} - {int(player['DPS'])}")
     return " | ".join(res)
