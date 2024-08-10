@@ -1,5 +1,6 @@
 {% load ladder %}
 {% load static %}
+{% load combatlog %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,6 +10,10 @@
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
         <title>OSCR | Open Source Combatlog Reader</title>
+        <meta property="og:title" content="OSCR | Open Source Combatlog Reader"</meta>
+        {% if request.resolver_match.url_name == 'combatlog' %}
+            <meta property="og:description" content="{% summary object %}"</meta>
+        {% endif %}
     </head>
     <body>
         <div class="container-fluid ui-container g-0 fill-height">
