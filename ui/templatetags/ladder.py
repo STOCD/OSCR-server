@@ -1,4 +1,4 @@
-""" Ladder Template Tags """
+"""Ladder Template Tags"""
 
 import logging
 
