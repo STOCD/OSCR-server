@@ -2,6 +2,7 @@
 {% block 'content' %}
 {% load l10n %}
 {% load static %}
+{% load core %}
 <div data-bs-theme="dark">
     <h2 style="display: inline-block;">{{object.metadata.map}} {% if object.metadata.difficulty is not None %}({{object.metadata.difficulty}}){% endif %}</h2>&nbsp;
     <h5 style="display: inline-block;">{{object.metadata.date_time|date:"DATETIME_FORMAT"}}</h5>
@@ -10,6 +11,7 @@
     <table class="table table-dark table-hover table-sm table-responsive">
         <thead>
             <tr scope="row">
+                <th scope="col">&nbsp</th>
                 <th scope="col">Player</th>
                 <th scope="col">Time</th>
                 <th scope="col">DPS</th>
@@ -19,25 +21,60 @@
                 <th scope="col">Taken Damage Share</th>
                 <th scope="col">Max One Hit</th>
                 <th scope="col">Deaths</th>
-                <th scope="col">Build</th>
+                <th scope="col">Highest Damage Ability</th>
             </tr>
         </thead>
         <tbody>
         {% for x, player in object.metadata.summary %}
-            <tr scope="row">
-                <td scople="col">{{player.name}}{{player.handle}}</td>
-                <td scople="col">{{player.combat_time|floatformat:0|localize}}s</td>
-                <td scople="col">{{player.DPS|floatformat:0}}</td>
-                <td scople="col">{{player.total_damage|floatformat:0}}</td>
-                <td scople="col">{{player.debuff|floatformat:2}}%</td>
-                <td scople="col">{{player.attacks_in_share|floatformat:2}}%</td>
-                <td scople="col">{{player.taken_damage_share|floatformat:2}}%</td>
-                <td scople="col">{{player.max_one_hit|floatformat:0|localize}}</td>
-                <td scople="col">{{player.deaths|floatformat:0}}</td>
-                <td scople="col">{{player.build}}</td>
+            <tr scope="row" style="cursor:pointer" data-bs-toggle="collapse" href="#collapse-{{forloop.counter}}" aria-expanded="false" aria-controls="collapse-{{forloop.counter}}">
+                <td scope="col"><img src="{% static 'img/chevron-down.svg' %}"/></td>
+                <td scope="col">{{player.name}}{{player.handle}}</td>
+                <td scope="col">{{player.combat_time|floatformat:0|localize}}s</td>
+                <td scope="col">{{player.DPS|floatformat:0}}</td>
+                <td scope="col">{{player.total_damage|floatformat:0}}</td>
+                <td scope="col">{{player.debuff|floatformat:2}}%</td>
+                <td scope="col">{{player.attacks_in_share|floatformat:2}}%</td>
+                <td scope="col">{{player.taken_damage_share|floatformat:2}}%</td>
+                <td scope="col">{{player.max_one_hit|floatformat:0|localize}}</td>
+                <td scope="col">{{player.deaths|floatformat:0}}</td>
+                <td scope="col">{{player.build}}</td>
             </tr>
-        </tbody>
+            <tr scope="row" class="collapse" id="collapse-{{forloop.counter}}">
+                <td scope="col" colspan="11">
+                    <table class="table table-dark table-hover table-sm table-responsive">
+                        <tr scope="row">
+                            <th scope="col">Damage Source</th>
+                            <th scope="col">DPS</th>
+                            <th scope="col">Total Damage</th>
+                            <th scope="col">Debuff</th>
+                            <th scope="col">Max One Hit</th>
+                            <th scope="col">Crit Chance</th>
+                            <th scope="col">Accuracy</th>
+                            <th scope="col">Flank Rate</th>
+                            <th scope="col">Kills</th>
+                            <th scope="col">Attacks</th>
+                            <th scope="col">Misses</th>
+                        </tr>
+                        {% for entry in player.damage_out %}
+                            <tr scope="row">
+                                <td scope="col">{{entry.name}}</td>
+                                <td scope="col">{{entry.summary|get:"DPS"|floatformat:0}}</td>
+                                <td scope="col">{{entry.summary|get:"Total Damage"|floatformat:0}}</td>
+                                <td scope="col">{{entry.summary|get:"Debuff"|percentage|floatformat:2}}%</td>
+                                <td scope="col">{{entry.summary|get:"Max One Hit"|floatformat:0}}</td>
+                                <td scope="col">{{entry.summary|get:"Crit Chance"|percentage|floatformat:2}}%</td>
+                                <td scope="col">{{entry.summary|get:"Accuracy"|percentage|floatformat:2}}%</td>
+                                <td scope="col">{{entry.summary|get:"Flank Rate"|percentage|floatformat:2}}%</td>
+                                <td scope="col">{{entry.summary|get:"Kills"|floatformat:0}}</td>
+                                <td scope="col">{{entry.summary|get:"Attacks"|floatformat:0}}</td>
+                                <td scope="col">{{entry.summary|get:"Misses"|floatformat:0}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
         {% endfor %}
+        </tbody>
     </table>
     {% if object.youtube is not None %}
         <div class="ratio ratio-16x9">

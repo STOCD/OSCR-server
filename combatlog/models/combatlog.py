@@ -1,4 +1,4 @@
-""" CombatLog Models """
+"""CombatLog Models"""
 
 import logging
 import os
@@ -6,14 +6,13 @@ import tempfile
 from pathlib import Path
 
 import OSCR
+from core.models import BaseModel
 from django.conf import settings
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils import timezone
-from rest_framework.exceptions import APIException
-
-from core.models import BaseModel
 from ladder.models import Ladder, LadderEntry
+from rest_framework.exceptions import APIException
 
 from .metadata import Metadata
 
@@ -32,13 +31,80 @@ class CombatLog(BaseModel):
     name = models.TextField(null=True, default=None)
     youtube = models.TextField(null=True, default=None)
 
+    def get_data_from_row(self, row, keys):
+        """Get an indidual row of data from the Tree"""
+        ret = {}
+        for idx in range(1, len(row)):
+            ret[keys[idx]] = row[idx]
+        return ret
+
+    def enumerate_tree(self, name, node, keys, max_depth=1):
+        """Get Player Data from a specific node in the Tree"""
+        ret = {"name": name, "summary": {}, "breakdown": []}
+        ret["summary"] = self.get_data_from_row(node.data, keys)
+        if max_depth:
+            for idx in range(node.child_count):
+                source = node.get_child(idx)
+                source_name = "".join(source.data[0])
+                ret["breakdown"].append(
+                    self.enumerate_tree(
+                        source_name,
+                        source,
+                        keys,
+                        max_depth=max_depth - 1,
+                    )
+                )
+        ret["breakdown"] = sorted(
+            ret["breakdown"],
+            reverse=True,
+            key=lambda data: data["summary"]["DPS"],
+        )
+
+        return ret
+
+    def tree_to_dict(self, tree):
+        """Contert OSCR's Tree class to a dictionary for easier use"""
+        data = {"players": []}
+        keys = list(tree.data)
+
+        # Players
+        players = tree.get_child(0)
+        for idx in range(players.child_count):
+            name = "".join(players.get_child(idx).data[0])
+            data["players"].append(
+                self.enumerate_tree(
+                    name,
+                    players.get_child(idx),
+                    keys,
+                )
+            )
+        data["players"] = sorted(
+            data["players"],
+            reverse=True,
+            key=lambda data: data["summary"]["DPS"],
+        )
+
+        # TODO: Critters, but not necessary
+        # critters = tree.get_child(1)
+
+        return data
+
+    def get_build(self, damage_out):
+        """
+        Return the 'build' from the damage out entry.
+        This is a hack that will just return the top DPS ability.
+        """
+        if not len(damage_out):
+            return "Unknown"
+        return damage_out[0]["name"]
+
     def update_metadata_from_remote(self):
         """Updates Metadata from remote storage"""
         data = self.get_data()
         if data:
-            self.update_metadata(data)
+            self.update_metadata(data, force=True)
 
-    def update_metadata_file(self, file):
+    def update_metadata_file(self, file, force=False):
         """Update Metadata from a file"""
 
         results = []
@@ -47,11 +113,12 @@ class CombatLog(BaseModel):
         parser.analyze_log_file()
 
         # Only look at the first combat for now.
-        parser.full_combat_analysis(0)
+        dmg_out, _, _, _ = parser.full_combat_analysis(0)
+        damage_out = self.tree_to_dict(dmg_out)
         combat = parser.active_combat
 
         players = {}
-        for name, player in parser.active_combat.players.items():
+        for name, player in combat.players.items():
             players[name] = player.__dict__
 
         players = sorted(
@@ -59,6 +126,18 @@ class CombatLog(BaseModel):
             reverse=True,
             key=lambda player: player[1]["combat_time"],
         )
+
+        # Add the damage out to the player.
+        for idx, player in enumerate(players):
+            handle = f"{player[1]['name']}{player[1]['handle']}"
+            for damage_out_player in damage_out["players"]:
+                if damage_out_player["name"] == handle:
+                    players[idx][1]["damage_out"] = damage_out_player["breakdown"]
+                    # Override Build with damage breakdown
+                    players[idx][1]["build"] = self.get_build(
+                        players[idx][1]["damage_out"]
+                    )
+                    break
 
         if len(players) == 0:
             raise APIException("Combat log is empty")
@@ -188,7 +267,7 @@ class CombatLog(BaseModel):
             if result["updated"]:
                 updated += 1
 
-        if updated == 0:
+        if updated == 0 and not force:
             raise APIException("There are no new records in this combat log.")
 
         with transaction.atomic():
@@ -200,6 +279,17 @@ class CombatLog(BaseModel):
                     summary=players,
                 )
                 self.metadata.save()
+            else:
+                self.metadata.summary = players
+                self.metadata.save()
+                # Need to backtrack and update the ladder entries.
+                for entry in self.ladderentry_set.all():
+                    for _, player in players:
+                        full_name = f"{player['name']}{player['handle']}"
+                        if entry.player == full_name:
+                            entry.data = player
+                            entry.save()
+                            break
             self.save()
 
         # Delete any combat logs that do not have ladder entries
@@ -207,13 +297,13 @@ class CombatLog(BaseModel):
 
         return results
 
-    def update_metadata(self, data):
+    def update_metadata(self, data, force=False):
         """Parse the Combat Log and create Metadata"""
 
         with tempfile.NamedTemporaryFile() as file:
             file.write(data)
             file.flush()
-            res = self.update_metadata_file(file)
+            res = self.update_metadata_file(file, force)
             self.put_data(data)
 
         return res
