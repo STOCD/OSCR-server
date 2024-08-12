@@ -17,4 +17,4 @@ class Command(BaseCommand):
             try:
                 combatlog.update_metadata_from_remote()
             except Exception as e:
-                LOGGER.info(f"{e}: {combatlog}")
+                LOGGER.info(e)
