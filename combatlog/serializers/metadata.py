@@ -1,4 +1,4 @@
-""" Metadata Serializers """
+"""Metadata Serializers"""
 
 from rest_framework import serializers
 
@@ -10,4 +10,9 @@ class MetadataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Metadata
-        exclude = []
+        exclude = [
+            "damage_out",
+            "damage_in",
+            "heal_out",
+            "heal_in",
+        ]
