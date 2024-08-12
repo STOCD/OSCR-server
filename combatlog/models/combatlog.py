@@ -6,13 +6,14 @@ import tempfile
 from pathlib import Path
 
 import OSCR
-from core.models import BaseModel
 from django.conf import settings
 from django.db import models, transaction
 from django.dispatch import receiver
 from django.utils import timezone
-from ladder.models import Ladder, LadderEntry
 from rest_framework.exceptions import APIException
+
+from core.models import BaseModel
+from ladder.models import Ladder, LadderEntry
 
 from .metadata import Metadata
 
@@ -132,10 +133,9 @@ class CombatLog(BaseModel):
             handle = f"{player[1]['name']}{player[1]['handle']}"
             for damage_out_player in damage_out["players"]:
                 if damage_out_player["name"] == handle:
-                    players[idx][1]["damage_out"] = damage_out_player["breakdown"]
                     # Override Build with damage breakdown
                     players[idx][1]["build"] = self.get_build(
-                        players[idx][1]["damage_out"]
+                        damage_out_player["breakdown"]
                     )
                     break
 
@@ -277,10 +277,12 @@ class CombatLog(BaseModel):
                     difficulty=combat.difficulty,
                     date_time=timezone.make_aware(combat.date_time),
                     summary=players,
+                    damage_out=damage_out,
                 )
                 self.metadata.save()
             else:
                 self.metadata.summary = players
+                self.metadata.damage_out = damage_out
                 self.metadata.save()
                 # Need to backtrack and update the ladder entries.
                 for entry in self.ladderentry_set.all():

@@ -3,6 +3,7 @@
 {% load l10n %}
 {% load static %}
 {% load core %}
+{% load combatlog %}
 <div data-bs-theme="dark">
     <h2 style="display: inline-block;">{{object.metadata.map}} {% if object.metadata.difficulty is not None %}({{object.metadata.difficulty}}){% endif %}</h2>&nbsp;
     <h5 style="display: inline-block;">{{object.metadata.date_time|date:"DATETIME_FORMAT"}}</h5>
@@ -55,7 +56,8 @@
                             <th scope="col">Attacks</th>
                             <th scope="col">Misses</th>
                         </tr>
-                        {% for entry in player.damage_out %}
+                        {% damage_out_breakdown object.metadata player.name player.handle as entries %}
+                        {% for entry in entries %}
                             <tr scope="row">
                                 <td scope="col">{{entry.name}}</td>
                                 <td scope="col">{{entry.summary|get:"DPS"|floatformat:0}}</td>
