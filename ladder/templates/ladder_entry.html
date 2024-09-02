@@ -114,6 +114,8 @@
                                 <img src="{% static 'img/18px-TFO_advanced_icon.png' %}"></img>&nbsp;Advanced
                             {% elif entry.ladder.difficulty == "Normal" %}
                                 <img src="{% static 'img/18px-TFO_normal_icon.png' %}"></img>&nbsp;Normal
+                            {% elif entry.ladder.difficulty == "Any" %}
+                                <img src="{% static 'img/18px-TFO_normal_icon.png' %}"></img>&nbsp;Any
                             {% elif entry.ladder.difficulty is None %}
                                 <img src="{% static 'img/18px-TFO_normal_icon.png' %}"></img>&nbsp;Any
                             {% else %}
