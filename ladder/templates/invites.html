@@ -1,0 +1,5 @@
+{% load ladder_entry %}
+<pre>
+{% for entry in ladderentry_list %}{% ladder_entry_channels entry as channels %}{% for channel in channels %}/channel_invite "{{channel}}" {{entry.player}}
+{% endfor %}{% endfor %}
+</pre>

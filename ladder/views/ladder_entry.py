@@ -1,19 +1,18 @@
-""" LadderEntry Views """
+"""LadderEntry Views"""
 
 import logging
 
+from core.filters import BaseFilterBackend
+from core.pagination import PageNumberPagination
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.query import QuerySet
 from django_filters.views import FilterView
-from rest_framework.filters import OrderingFilter
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
-from rest_framework.viewsets import GenericViewSet
-
-from core.filters import BaseFilterBackend
-from core.pagination import PageNumberPagination
 from ladder.filters import LadderEntryFilter
 from ladder.models import LadderEntry
 from ladder.serializers import LadderEntrySerializer
+from rest_framework.filters import OrderingFilter
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from rest_framework.viewsets import GenericViewSet
 
 LOGGER = logging.getLogger("django")
 
@@ -74,3 +73,26 @@ class LadderEntryView(FilterView):
             queryset = queryset.order_by(*ordering)
 
         return queryset.filter(visible=True)
+
+
+class LadderInvitesView(FilterView):
+    """LadderEntry View"""
+
+    model = LadderEntry
+    filter_backends = (BaseFilterBackend, OrderingFilter)
+    filterset_class = LadderEntryFilter
+
+    def get_queryset(self):
+        return (
+            LadderEntry.objects.filter(
+                ladder__internal_name__in=[
+                    "Infected Space",
+                    "Hive Space",
+                    "Bug Hunt",
+                    "Nukara Prime: Transdimensional Tactics",
+                ],
+            )
+            .exclude(ladder__difficulty="Any")
+            .order_by("-data__DPS")
+            .distinct("player", "ladder__difficulty")
+        )
