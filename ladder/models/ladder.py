@@ -52,4 +52,4 @@ class Ladder(BaseModel):
                 self.create_variant(variant)
 
     def __str__(self):
-        return f"{'[Solo]' if self.is_solo else ''} ({self.variant.name}) {self.name} {self.difficulty} {self.metric}"
+        return f"{'[Solo]' if self.is_solo else ''} ({self.variant.name}) {self.name} ({self.difficulty} Difficulty) {self.metric}"

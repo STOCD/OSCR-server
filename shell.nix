@@ -6,6 +6,8 @@ in pkgs.mkShell rec {
   name = "impurePythonEnv";
   venvDir = "./.venv";
   buildInputs = [
+    openapi-generator-cli
+
     # A Python interpreter including the 'venv' module is required to bootstrap
     # the environment.
     pythonPackages.python
@@ -18,6 +20,8 @@ in pkgs.mkShell rec {
     # add them to PYTHONPATH and thus make them accessible from within the venv.
     # pythonPackages.pyside6
     pythonPackages.numpy
+    pythonPackages.twine
+    pythonPackages.build
 
     # In this particular example, in order to compile any binary extensions they may
     # require, the Python modules listed in the hypothetical requirements.txt need
