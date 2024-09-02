@@ -24,9 +24,7 @@ class LadderEntryViewSet(
 ):
     """LadderEntry API"""
 
-    queryset = LadderEntry.objects.filter(visible=True).exclude(
-        ladder__difficulty="Any"
-    )
+    queryset = LadderEntry.objects.filter(visible=True)
     serializer_class = LadderEntrySerializer
     pagination_class = PageNumberPagination
     filter_backends = (BaseFilterBackend, OrderingFilter)
@@ -74,4 +72,27 @@ class LadderEntryView(FilterView):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
 
-        return queryset.filter(visible=True).exclude(ladder__difficulty="Any")
+        return queryset.filter(visible=True)
+
+
+class LadderInvitesView(FilterView):
+    """LadderEntry View"""
+
+    model = LadderEntry
+    filter_backends = (BaseFilterBackend, OrderingFilter)
+    filterset_class = LadderEntryFilter
+
+    def get_queryset(self):
+        return (
+            LadderEntry.objects.filter(
+                ladder__internal_name__in=[
+                    "Infected Space",
+                    "Hive Space",
+                    "Bug Hunt",
+                    "Nukara Prime: Transdimensional Tactics",
+                ],
+            )
+            .exclude(ladder__difficulty="Any")
+            .order_by("-data__DPS")
+            .distinct("name", "ladder__difficulty")
+        )

@@ -20,4 +20,9 @@ urlpatterns = [
         views.LadderEntryView.as_view(template_name="ladder_entry.html"),
         name="ui",
     ),
+    path(
+        "ui/invites/",
+        views.LadderInvitesView.as_view(template_name="invites.html"),
+        name="invites",
+    ),
 ]

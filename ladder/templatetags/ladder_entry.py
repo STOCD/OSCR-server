@@ -3,7 +3,6 @@
 import logging
 
 from django import template
-
 from ladder.models import Ladder, LadderEntry
 
 register = template.Library()
@@ -32,7 +31,10 @@ def ladder_rank(obj, request):
     key = f"data__{obj.ladder.metric}__gt"
     flt = {key: obj.data.get(obj.ladder.metric, 0)}
     return (
-        LadderEntry.objects.filter(ladder=obj.ladder).filter(visible=True).filter(**flt).count()
+        LadderEntry.objects.filter(ladder=obj.ladder)
+        .filter(visible=True)
+        .filter(**flt)
+        .count()
         + 1
     )
 
@@ -57,3 +59,31 @@ def ladder_difficulties():
         .values_list("difficulty", flat=True)
         .distinct()
     )
+
+
+@register.simple_tag
+def ladder_entry_channels(instance):
+    # <pre></pre>
+    # /channel_invite "{{channel}}" {{entry.player}} # {{entry.data.DPS|floatformat:0}} DPS
+    channels = []
+    if instance.ladder.internal_name in [
+        "Infected Space",
+    ] and instance.ladder.internal_difficulty in ["Advanced", "Elite"]:
+        if instance.data.get("DPS", 0) >= 500000:
+            channels.append("DPS-#s-Prime")
+        if instance.data.get("DPS", 0) >= 150000:
+            channels.append("DPS-#s-Elites")
+    elif instance.ladder.internal_name in [
+        "Hive Space",
+    ] and instance.ladder.internal_difficulty in ["Elite"]:
+        if instance.data.get("DPS", 0) >= 500000:
+            channels.append("DPS-#s-Prime")
+        if instance.data.get("DPS", 0) >= 150000:
+            channels.append("DPS-#s-Elites")
+    elif instance.ladder.internal_name in [
+        "Bug Hunt",
+        "Nukera Prime: Transdimensional Tactics",
+    ]:
+        if instance.data.get("DPS", 0) >= 1000:
+            channels.append("DPS-#s-Ground")
+    return channels
