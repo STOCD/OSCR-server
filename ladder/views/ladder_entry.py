@@ -94,6 +94,6 @@ class LadderInvitesView(FilterView):
                 ],
             )
             .exclude(ladder__difficulty="Any")
-            .order_by("-data__DPS")
-            .distinct("player", "ladder__difficulty")
+            .order_by("ladder__id")
+            .distinct("ladder__difficulty", "player")
         )
