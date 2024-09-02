@@ -93,6 +93,5 @@ class LadderInvitesView(FilterView):
                 ],
             )
             .exclude(ladder__difficulty="Any")
-            .order_by()
             .distinct("player", "ladder__difficulty")
         )
