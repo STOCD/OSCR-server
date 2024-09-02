@@ -188,7 +188,7 @@ class CombatLog(BaseModel):
 
         if len(ladders) == 0:
             raise APIException(
-                f"{combat.map} {combat.difficulty} at {combat.start_time} has no matching ladder"
+                f"{combat.map} ({combat.difficulty} Difficulty) at {combat.start_time} has no matching ladder"
             )
 
         for _, player in players:

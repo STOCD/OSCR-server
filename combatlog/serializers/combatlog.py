@@ -1,4 +1,4 @@
-""" CombatLog Serializers """
+"""CombatLog Serializers"""
 
 from rest_framework import serializers
 
@@ -23,6 +23,12 @@ class CombatLogUploadSerializer(serializers.Serializer):
     file = serializers.FileField()
 
 
+class CombatLogUploadV2Serializer(serializers.Serializer):
+    """CombatLog Upload Serializer"""
+
+    file = serializers.FileField()
+
+
 class CombatLogUploadResponseSerializer(serializers.Serializer):
     """CombatLog Upload Response Serializer"""
 
@@ -30,3 +36,15 @@ class CombatLogUploadResponseSerializer(serializers.Serializer):
     updated = serializers.BooleanField()
     detail = serializers.CharField()
     value = serializers.FloatField()
+
+
+class CombatLogUploadV2ResponseSerializer(serializers.Serializer):
+    """CombatLog Upload Response Serializer"""
+
+    results = CombatLogUploadResponseSerializer(
+        many=True,
+        required=False,
+        allow_null=True,
+    )
+    combatlog = serializers.IntegerField(required=False, allow_null=True)
+    detail = serializers.CharField()

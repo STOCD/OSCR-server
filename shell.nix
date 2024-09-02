@@ -6,6 +6,8 @@ in pkgs.mkShell rec {
   name = "impurePythonEnv";
   venvDir = "./.venv";
   buildInputs = [
+    openapi-generator-cli
+
     # A Python interpreter including the 'venv' module is required to bootstrap
     # the environment.
     pythonPackages.python
