@@ -20,6 +20,8 @@ in pkgs.mkShell rec {
     # add them to PYTHONPATH and thus make them accessible from within the venv.
     # pythonPackages.pyside6
     pythonPackages.numpy
+    pythonPackages.twine
+    pythonPackages.build
 
     # In this particular example, in order to compile any binary extensions they may
     # require, the Python modules listed in the hypothetical requirements.txt need
