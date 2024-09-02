@@ -81,6 +81,7 @@ class LadderInvitesView(FilterView):
     model = LadderEntry
     filter_backends = (BaseFilterBackend, OrderingFilter)
     filterset_class = LadderEntryFilter
+    ordering = "-data__DPS"
 
     def get_queryset(self):
         return (
@@ -93,5 +94,6 @@ class LadderInvitesView(FilterView):
                 ],
             )
             .exclude(ladder__difficulty="Any")
+            .order_by("-data__DPS")
             .distinct("player", "ladder__difficulty")
         )
