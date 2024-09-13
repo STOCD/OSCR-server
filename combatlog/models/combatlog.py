@@ -143,8 +143,15 @@ class CombatLog(BaseModel):
             raise APIException("Combat log is empty")
 
         # Grab the highest combat_time. This is used to validate other players.
-        # Player combat_time should be within 90% of the highest time.
-        combat_time = players[0][1]["combat_time"] * 0.90
+        # If Time < 30s: Combat Time should be within 50%
+        # If Time >= 30s and < 60s: Combat Time should be within 75%
+        # If Time >= 60s: Combat Time should be within 90% of the highbest.
+        if players[0][1]["combat_time"] < 60:
+            combat_time = players[0][1]["combat_time"] * 0.75
+        elif players[0][1]["combat_time"] < 30:
+            combat_time = players[0][1]["combat_time"] * 0.50
+        else:
+            combat_time = players[0][1]["combat_time"] * 0.90
 
         # Check to see if map / difficulty combination exists in the ladder
         # table. if it does, iterate over each player to see if they have a
@@ -188,7 +195,8 @@ class CombatLog(BaseModel):
 
         if len(ladders) == 0:
             raise APIException(
-                f"{combat.map} ({combat.difficulty} Difficulty) at {combat.start_time} has no matching ladder"
+                f"{combat.map} ({combat.difficulty} Difficulty) at {
+                    combat.start_time} has no matching ladder"
             )
 
         for _, player in players:
@@ -213,7 +221,8 @@ class CombatLog(BaseModel):
                     and player.get(ladder.metric) > ladder.manual_review_threshold
                 ):
                     visible = False
-                    manual_review = f", but result needs to be manually reviewed. Combat Log ID #{self.pk}"
+                    manual_review = f", but result needs to be manually reviewed. Combat Log ID #{
+                        self.pk}"
                 else:
                     visible = True
                     manual_review = ""
