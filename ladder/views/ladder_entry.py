@@ -2,20 +2,20 @@
 
 import logging
 
+from core.filters import BaseFilterBackend
+from core.pagination import PageNumberPagination
 from django.core.exceptions import ImproperlyConfigured
-from django.db.models.query import QuerySet
-from django.http import HttpResponseRedirect, StreamingHttpResponse
+from django.http import StreamingHttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.db.models.query import QuerySet
 from django_filters.views import FilterView
+from ladder.filters import LadderEntryFilter
+from ladder.models import LadderEntry
+from ladder.serializers import LadderEntrySerializer
 from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
-
-from core.filters import BaseFilterBackend
-from core.pagination import PageNumberPagination
-from ladder.filters import LadderEntryFilter
-from ladder.models import LadderEntry, Variant
-from ladder.serializers import LadderEntrySerializer
+from ladder.models import Variant
 
 LOGGER = logging.getLogger("django")
 
