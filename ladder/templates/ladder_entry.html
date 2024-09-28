@@ -4,7 +4,18 @@
 {% load static %}
 {% load ladder %}
 {% load ladder_entry %}
-    <form action="{% url 'ladder_entries' %}">
+    <script>
+        $(document).ready(function() {
+            $('#ladder-entries').on('submit', function(e) {
+                $(this).find('.form-control').each(function() {
+                    if (!$(this).val()) {
+                        $(this).remove();
+                    }
+                });
+            })
+        });
+    </script>
+    <form id="ladder-entries" action="{% url 'ladder_entries' %}">
         <div class="row" data-bs-theme="dark">
             <div class="col col-md-2">
                 <input type="text" class="form-control form-control-sm" id="inputPlayer" name="player__icontains" placeholder="player@handle" value="{{request.GET.player__icontains}}">
