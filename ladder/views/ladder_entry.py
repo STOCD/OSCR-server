@@ -13,6 +13,9 @@ from ladder.serializers import LadderEntrySerializer
 from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
+from django.http import StreamingHttpResponse
+from django.template.response import TemplateResponse
+import time
 
 LOGGER = logging.getLogger("django")
 
@@ -95,5 +98,20 @@ class LadderInvitesView(FilterView):
             )
             .exclude(ladder__difficulty="Any")
             .order_by("ladder__id")
-            .distinct("ladder__difficulty", "player")
+            # .distinct("ladder__difficulty", "player")
         )
+
+    def get_stream(self):
+        """Return queryset as stream response."""
+        yield "<pre>"
+        for entry in self.get_queryset():
+            for channel in entry.ladder_entry_channels():
+                yield f"/channel_invite {channel} {entry.player}\n"
+        yield "</pre>"
+
+    def get(self, request, *args, **kwargs):
+        """Overload for HTTP Get Method."""
+        response = StreamingHttpResponse(self.get_stream())
+        response["Cache-Control"] = "no-cache"
+        response["X-Accel-Buffering"] = "no"
+        return response
