@@ -4,7 +4,19 @@
 {% load static %}
 {% load ladder %}
 {% load ladder_entry %}
-    <form action="{% url 'ladder_entries' %}">
+    <script>
+        $(document).ready(function() {
+            $('#ladder-entries').on('submit', function(e) {
+                $(this).find('.form-control').each(function() {
+                    if (!$(this).val()) {
+                        $(this).remove();
+                    }
+                });
+            })
+            $('.b-tooltip').tooltip();
+        });
+    </script>
+    <form id="ladder-entries" action="{% url 'ladder_entries' %}">
         <div class="row" data-bs-theme="dark">
             <div class="col col-md-2">
                 <input type="text" class="form-control form-control-sm" id="inputPlayer" name="player__icontains" placeholder="player@handle" value="{{request.GET.player__icontains}}">
@@ -71,8 +83,11 @@
                         selected
                         {%else%}
                         {%endif%}
-                        value="0">2+ Players</option>
+                        value="0">Team</option>
                 </select>
+            </div>
+            <div class="col col-md-2" style="display: none;">
+                <input type="text" class="form-control form-control-sm" id="inputPlayer" name="search" placeholder="" value="1">
             </div>
             <div class="col col-md-2">
                 <button type="submit" class="btn btn-primary btn-sm float-end">Search</button>
@@ -83,18 +98,18 @@
             <table class="table table-dark table-hover table-sm table-responsive">
                 <thead>
                     <tr scope="row">
-                        <th scope="col">Result</th>
-                        <th scope="col">Rank</th>
+                        <th scope="col" class="b-tooltip" data-toggle="tooltip" data-html="true" data-placement="top" title="Result is the player's placement relative to the search query.">Result</th>
+                        <th scope="col" class="b-tooltip" data-toggle="tooltip" data-html="true" data-placement="top" title="Rank is the player's placement relative to the associated Variant.">Rank</th>
                         <th scope="col">Date</th>
                         <th scope="col">Player</th>
-                        <th scope="col">Variant</th>
-                        <th scope="col">Map</th>
+                        <th scope="col" class="b-tooltip" data-toggle="tooltip" data-html="true" data-placement="top" title="A Variant is a distinct ladder within a map. Variants are usually created for each new Season.">Variant</th>
+                        <th scope="col" class="b-tooltip" data-toggle="tooltip" data-html="true" data-placement="top" title="A Ladder is a Map associated with a combat log metric (e.g. Infected: The Conduit - DPS)">Ladder</th>
                         <th scope="col">Difficulty</th>
                         <th scope="col">DPS</th>
                         <th scope="col">Damage</th>
                         <th scope="col">Time</th>
                         <th scope="col">Highest Damage Ability</th>
-                        <th scope="col">Group Size</th>
+                        <th scope="col" class="b-tooltip" data-toggle="tooltip" data-html="true" data-placement="top" title="Solo Runs Qualify for Team Runs if the Solo Run is a player's Personal Best">Group</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -130,17 +145,17 @@
                             {% if entry.ladder.is_solo %}
                             Solo
                             {% else %}
-                            2+ Players
+                            Team
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{% url 'combatlog' entry.combatlog.pk %}" target="_blank"><img src="{% static 'img/info.svg' %}" data-toggle="tooltip" data-placement="top" title="Details"></img></a>
+                            <a href="{% url 'combatlog' entry.combatlog.pk %}" target="_blank"><img src="{% static 'img/info.svg' %}" data-toggle="tooltip" data-placement="top" title="Details"  class="b-tooltip" ></img></a>
                             {% if entry.combatlog.youtube %}
                                 <a href="https://www.youtube.com/watch/{{entry.combatlog.youtube}}" target="_blank">
-                                    <img src="{% static 'img/youtube.svg' %}" data-toggle="tooltip" data-placement="top" title="Youtube"></img>
+                                    <img src="{% static 'img/youtube.svg' %}" data-toggle="tooltip" data-placement="top" title="Youtube" class="b-tooltip" ></img>
                                 </a>
                             {% else %}
-                                <img src="{% static 'img/youtube.svg' %}" data-toggle="tooltip" data-placement="top" title="Youtube" class="invisible"></img>
+                                <img src="{% static 'img/youtube.svg' %}" data-toggle="tooltip" data-placement="top" title="Youtube" class="invisible b-tooltip"></img>
                             {% endif %}
                         </td>
                     </tr>

@@ -1,4 +1,4 @@
-""" Variant Models """
+"""Variant Models"""
 
 from django.db import models
 

@@ -311,11 +311,13 @@ class CombatLog(BaseModel):
     def update_metadata(self, data, force=False):
         """Parse the Combat Log and create Metadata"""
 
-        with tempfile.NamedTemporaryFile() as file:
+        with tempfile.NamedTemporaryFile(delete=False) as file:
             file.write(data)
             file.flush()
+            file.close()
             res = self.update_metadata_file(file, force)
             self.put_data(data)
+            os.unlink(file.name)
 
         return res
 
