@@ -14,11 +14,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from combatlog.models import CombatLog
-from combatlog.serializers import (CombatLogSerializer,
-                                   CombatLogUploadResponseSerializer,
-                                   CombatLogUploadSerializer,
-                                   CombatLogUploadV2ResponseSerializer,
-                                   CombatLogUploadV2Serializer)
+from combatlog.serializers import (
+    CombatLogSerializer,
+    CombatLogUploadResponseSerializer,
+    CombatLogUploadSerializer,
+    CombatLogUploadV2ResponseSerializer,
+    CombatLogUploadV2Serializer,
+)
 from core.pagination import PageNumberPagination
 
 LOGGER = logging.getLogger("django")
