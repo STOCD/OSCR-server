@@ -5,8 +5,7 @@ import logging
 from core.filters import BaseFilterBackend
 from core.pagination import PageNumberPagination
 from django.core.exceptions import ImproperlyConfigured
-from django.http import StreamingHttpResponse
-from django.http import HttpResponseRedirect
+from django.http import StreamingHttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.db.models.query import QuerySet
 from django_filters.views import FilterView
