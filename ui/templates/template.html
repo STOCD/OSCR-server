@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <script src="{% static 'js/jquery.slim.min.js' %}"></script>
+        <script src="{% static 'js/popper.min.js.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
         <title>OSCR | Open Source Combatlog Reader</title>
@@ -21,15 +22,19 @@
                 <a href="{% url 'ui' %}"><img src="{% static 'img/oscrbanner-slim-dark-label.png' %}" class='banner'></img></a>
             </div>
             <div class="flex ui-content content-background">
-                <div class="row">
-                    {% block 'content' %}
-                    {% endblock %}
                 <div class="col d-flex justify-content-center">
                     <span class="m-1"><a href="https://github.com/STOCD/OSCR-UI/releases" target="_blank" class="link-light link-underline-opacity-25">Download OSCR</a></span>
                     <span class="m-1">|</span>
                     <span class="m-1"><a href="https://github.com/STOCD" target="_blank" class="link-light link-underline-opacity-25">STOCD Github</a></span>
                     <span class="m-1">|</span>
                     <span class="m-1"><a href="https://discord.gg/stobuilds" target="_blank" class="link-light link-underline-opacity-25">STOBuilds Discord</a></span>
+                    <span class="m-1">|</span>
+                    <span class="m-1"><a href="#" class="link-light link-underline-opacity-25">Statistics</a></span>
+                </div>
+                <hr>
+                <div class="row">
+                    {% block 'content' %}
+                    {% endblock %}
                 </div>
             </div>
         </div>
