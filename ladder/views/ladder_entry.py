@@ -5,6 +5,9 @@ import logging
 from core.filters import BaseFilterBackend
 from core.pagination import PageNumberPagination
 from django.core.exceptions import ImproperlyConfigured
+from django.http import StreamingHttpResponse
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.db.models.query import QuerySet
 from django_filters.views import FilterView
 from ladder.filters import LadderEntryFilter
@@ -13,9 +16,7 @@ from ladder.serializers import LadderEntrySerializer
 from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
-from django.http import StreamingHttpResponse
-from django.template.response import TemplateResponse
-import time
+from ladder.models import Variant
 
 LOGGER = logging.getLogger("django")
 
@@ -76,6 +77,26 @@ class LadderEntryView(FilterView):
             queryset = queryset.order_by(*ordering)
 
         return queryset.filter(visible=True)
+
+    def get(self, request, *args, **kwargs):
+        """Override GET to add parameters into the request object."""
+        if "search" not in request.GET:
+            base_url = reverse("ladder_entries")
+            query_string = request.GET.copy()
+            query_string["search"] = "1"
+            query_string["ladder__variant__name"] = (
+                Variant.objects.exclude(name="Default")
+                .order_by("-start_date")
+                .first()
+                .name
+            )
+            url = f"{base_url}?{query_string.urlencode()}"
+            return HttpResponseRedirect(url)
+        else:
+            request.GET._mutable = True
+            request.GET.pop("search")
+            request.GET._mutable = False
+        return super().get(request, *args, **kwargs)
 
 
 class LadderInvitesView(FilterView):
