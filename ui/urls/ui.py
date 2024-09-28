@@ -1,8 +1,12 @@
-""" URL URLs """
+"""URL URLs"""
 
-# from django.urls import path
-# from django.views.generic import TemplateView
+from django.urls import path
+from django.views.generic import TemplateView
 
 urlpatterns = [
-    # path("ui/", TemplateView.as_view(template_name="ui.html")),
+    path(
+        "ui/stats/",
+        TemplateView.as_view(template_name="stats.html"),
+        name="stats",
+    ),
 ]

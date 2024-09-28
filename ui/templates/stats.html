@@ -1,0 +1,55 @@
+{% extends 'template.html' %}
+{% block 'content' %}
+{% load ladder %}
+{% get_current_variant as instance %}
+{% get_variant_metrics instance as current_metrics %}
+{% get_variant_metrics None as all_time_metrics %}
+    <div class="content" data-bs-theme="dark">
+        <div class="table">
+            <h3>Current Season: {{instance.name}} </h3>
+            <ul class="list-group">
+                <li class="list-group-item">Number of Characters on Ladder: {{current_metrics.characters.count}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (1m DPS+, Space): {{current_metrics.characters.space.1000000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (500k DPS+, Space): {{current_metrics.characters.space.500000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (200k DPS+, Space): {{current_metrics.characters.space.300000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (100k DPS+, Space): {{current_metrics.characters.space.100000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (10k DPS+, Ground): {{current_metrics.characters.ground.10000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (5k DPS+, Ground): {{current_metrics.characters.ground.5000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (3k DPS+, Ground): {{current_metrics.characters.ground.3000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (1k DPS+, Ground): {{current_metrics.characters.ground.1000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder: {{current_metrics.accounts.count}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (1m DPS+, Space): {{current_metrics.accounts.space.1000000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (500k DPS+, Space): {{current_metrics.accounts.space.500000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (200k DPS+, Space): {{current_metrics.accounts.space.300000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (100k DPS+, Space): {{current_metrics.accounts.space.100000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (10k DPS+, Ground): {{current_metrics.accounts.ground.10000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (5k DPS+, Ground): {{current_metrics.accounts.ground.5000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (3k DPS+, Ground): {{current_metrics.accounts.ground.3000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (1k DPS+, Ground): {{current_metrics.accounts.ground.1000}}</li>
+            </ul>
+        </div>
+        <div class="table">
+            <h3>All Time</h3>
+            <ul class="list-group">
+                <li class="list-group-item">Number of Characters on Ladder: {{all_time_metrics.characters.count}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (1m DPS+, Space): {{all_time_metrics.characters.space.1000000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (500k DPS+, Space): {{all_time_metrics.characters.space.500000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (200k DPS+, Space): {{all_time_metrics.characters.space.300000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (100k DPS+, Space): {{all_time_metrics.characters.space.100000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (10k DPS+, Ground): {{all_time_metrics.characters.ground.10000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (5k DPS+, Ground): {{all_time_metrics.characters.ground.5000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (3k DPS+, Ground): {{all_time_metrics.characters.ground.3000}}</li>
+                <li class="list-group-item">Number of Characters on Ladder (1k DPS+, Ground): {{all_time_metrics.characters.ground.1000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder: {{all_time_metrics.accounts.count}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (1m DPS+, Space): {{all_time_metrics.accounts.space.1000000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (500k DPS+, Space): {{all_time_metrics.accounts.space.500000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (200k DPS+, Space): {{all_time_metrics.accounts.space.300000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (100k DPS+, Space): {{all_time_metrics.accounts.space.100000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (10k DPS+, Ground): {{all_time_metrics.accounts.ground.10000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (5k DPS+, Ground): {{all_time_metrics.accounts.ground.5000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (3k DPS+, Ground): {{all_time_metrics.accounts.ground.3000}}</li>
+                <li class="list-group-item">Number of Accounts on Ladder (1k DPS+, Ground): {{all_time_metrics.accounts.ground.1000}}</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

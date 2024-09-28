@@ -2,20 +2,21 @@
 
 import logging
 
-from core.filters import BaseFilterBackend
-from core.pagination import PageNumberPagination
 from django.core.exceptions import ImproperlyConfigured
-from django.http import StreamingHttpResponse, HttpResponseRedirect
-from django.urls import reverse
 from django.db.models.query import QuerySet
+from django.http import HttpResponseRedirect, StreamingHttpResponse
+from django.urls import reverse
+from django.utils import timezone
 from django_filters.views import FilterView
-from ladder.filters import LadderEntryFilter
-from ladder.models import LadderEntry
-from ladder.serializers import LadderEntrySerializer
 from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.viewsets import GenericViewSet
-from ladder.models import Variant
+
+from core.filters import BaseFilterBackend
+from core.pagination import PageNumberPagination
+from ladder.filters import LadderEntryFilter
+from ladder.models import LadderEntry, Variant
+from ladder.serializers import LadderEntrySerializer
 
 LOGGER = logging.getLogger("django")
 
@@ -84,7 +85,7 @@ class LadderEntryView(FilterView):
             query_string = request.GET.copy()
             query_string["search"] = "1"
             query_string["ladder__variant__name"] = (
-                Variant.objects.exclude(name="Default")
+                Variant.objects.filter(start_date__lte=timezone.now())
                 .order_by("-start_date")
                 .first()
                 .name
@@ -118,7 +119,7 @@ class LadderInvitesView(FilterView):
             )
             .exclude(ladder__difficulty="Any")
             .order_by("ladder__id")
-            # .distinct("ladder__difficulty", "player")
+            .distinct("ladder__difficulty", "player")
         )
 
     def get_stream(self):
