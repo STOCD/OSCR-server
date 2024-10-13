@@ -119,7 +119,7 @@ class LadderInvitesView(FilterView):
             )
             .exclude(ladder__difficulty="Any")
             .order_by("ladder__id")
-            .distinct("ladder__difficulty", "player")
+            .distinct("ladder__id", "data__handle")
         )
 
     def get_stream(self):
