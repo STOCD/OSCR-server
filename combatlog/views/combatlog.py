@@ -1,5 +1,6 @@
 """CombatLog Views"""
 
+import gzip
 import logging
 
 from django.db import transaction
@@ -137,6 +138,34 @@ class CombatLogViewSet(
         response["Content-Disposition"] = f'attachment; filename="{instance}.log"'
         response["Content-Transfer-Encoding"] = "binary"
         response.write(data)
+        return response
+
+    @swagger_auto_schema(
+        responses={
+            "200": openapi.Response(
+                "File Attachment", schema=openapi.Schema(type=openapi.TYPE_FILE)
+            )
+        },
+    )
+    @action(
+        detail=True,
+        methods=["GET"],
+        permission_classes=(),
+    )
+    def download_raw(self, request, pk=None):
+        """
+        Combat Log Download
+
+        Download the saved Combat Log
+        """
+
+        instance = self.get_object()
+        data = instance.get_data()
+
+        response = HttpResponse()
+        response["Content-Disposition"] = f'attachment; filename="{instance}.log"'
+        response["Content-Transfer-Encoding"] = "binary"
+        response.write(gzip.decompress(data))
         return response
 
 
