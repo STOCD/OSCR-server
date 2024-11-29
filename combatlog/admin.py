@@ -4,9 +4,17 @@ from django.contrib import admin
 from django.db.models import JSONField
 from django_json_widget.widgets import JSONEditorWidget
 
+from ladder.models import LadderEntry
+
 from .models import CombatLog, Metadata
 
-admin.site.register(CombatLog)
+
+class LadderEntryInline(admin.StackedInline):
+    model = LadderEntry
+    extra = 1
+    formfield_overrides = {
+        JSONField: {"widget": JSONEditorWidget},
+    }
 
 
 @admin.register(Metadata)

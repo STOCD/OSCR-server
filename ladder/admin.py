@@ -1,13 +1,10 @@
-""" CombatLog admin """
+"""CombatLog admin"""
 
 from django.contrib import admin
 from django.db.models import JSONField
 from django_json_widget.widgets import JSONEditorWidget
 
 from .models import Ladder, LadderEntry, Variant
-
-admin.site.register(Ladder)
-admin.site.register(Variant)
 
 
 @admin.register(LadderEntry)
@@ -27,6 +24,13 @@ class LadderEntryAdmin(admin.ModelAdmin):
     formfield_overrides = {
         JSONField: {"widget": JSONEditorWidget},
     }
+    search_fields = [
+        "player",
+        "ladder__name",
+        "ladder__difficulty",
+        "ladder__variant__name",
+        "data__build",
+    ]
 
     @admin.display(ordering="ladder__name")
     def ladder__name(self, obj):
@@ -59,3 +63,16 @@ class LadderEntryAdmin(admin.ModelAdmin):
     @admin.display(ordering="visible")
     def visible(self, obj):
         return obj.data.get("visible")
+
+
+@admin.register(Ladder)
+class LadderAdmin(admin.ModelAdmin):
+    search_fields = [
+        "name",
+        "variant__name",
+    ]
+
+
+@admin.register(Variant)
+class VarientAdmin(admin.ModelAdmin):
+    search_fields = []
