@@ -27,3 +27,4 @@ class MetadataAdmin(admin.ModelAdmin):
 @admin.register(CombatLog)
 class CombatLogAdmin(admin.ModelAdmin):
     inlines = [LadderEntryInline]
+    exclude = ["metadata"]
