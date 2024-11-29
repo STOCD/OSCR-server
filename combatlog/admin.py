@@ -1,4 +1,4 @@
-""" CombatLog admin """
+"""CombatLog admin"""
 
 from django.contrib import admin
 from django.db.models import JSONField
@@ -14,3 +14,9 @@ class MetadataAdmin(admin.ModelAdmin):
     formfield_overrides = {
         JSONField: {"widget": JSONEditorWidget},
     }
+
+
+@admin.register(CombatLog)
+class CombatLogAdmin(admin.ModelAdmin):
+    inlines = [LadderEntryInline]
+    exclude = ["metadata"]

@@ -12,6 +12,7 @@ admin.site.register(Variant)
 
 @admin.register(LadderEntry)
 class LadderEntryAdmin(admin.ModelAdmin):
+    exclude = [ "combatlog" ]
     list_display = [
         "player",
         "ladder__name",

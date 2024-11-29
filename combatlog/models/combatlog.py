@@ -142,16 +142,8 @@ class CombatLog(BaseModel):
         if len(players) == 0:
             raise APIException("Combat log is empty")
 
-        # Grab the highest combat_time. This is used to validate other players.
-        # If Time < 30s: Combat Time should be within 50%
-        # If Time >= 30s and < 60s: Combat Time should be within 75%
-        # If Time >= 60s: Combat Time should be within 90% of the highbest.
-        if players[0][1]["combat_time"] < 60:
-            combat_time = players[0][1]["combat_time"] * 0.75
-        elif players[0][1]["combat_time"] < 30:
-            combat_time = players[0][1]["combat_time"] * 0.50
-        else:
-            combat_time = players[0][1]["combat_time"] * 0.90
+        # TBD: We use 0.9 combat time until a better choice can be made.
+        combat_time = players[0][1]["combat_time"] * 0.90
 
         # Check to see if map / difficulty combination exists in the ladder
         # table. if it does, iterate over each player to see if they have a
@@ -276,8 +268,9 @@ class CombatLog(BaseModel):
             if result["updated"]:
                 updated += 1
 
+        # No not raise an exception here anymore - return the status indicating why no logs were updated.
         if updated == 0 and not force:
-            raise APIException("There are no new records in this combat log.")
+            return results
 
         with transaction.atomic():
             if self.metadata is None:
