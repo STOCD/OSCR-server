@@ -181,5 +181,19 @@
             "internal_name": "Khitomer Space",
             "internal_difficulty": "Elite"
         }
+    },
+    {
+        "model": "ladder.Ladder",
+        "pk": 1014,
+        "fields": {
+            "name": "Winter Invasion",
+            "difficulty": "Normal",
+            "metric": "DPS",
+            "variant": "Default",
+            "is_solo": true,
+            "is_space": false,
+            "internal_name": "Winter Invasion",
+            "internal_difficulty": "Normal"
+        }
     }
 ]
