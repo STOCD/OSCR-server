@@ -153,5 +153,19 @@
             "internal_name": "Hive Space",
             "internal_difficulty": null
         }
+    },
+    {
+        "model": "ladder.Ladder",
+        "pk": 12,
+        "fields": {
+            "name": "Winter Invasion",
+            "difficulty": "Normal",
+            "metric": "DPS",
+            "variant": "Default",
+            "is_solo": false,
+            "is_space": false,
+            "internal_name": "Winter Invasion",
+            "internal_difficulty": "Normal"
+        }
     }
 ]
