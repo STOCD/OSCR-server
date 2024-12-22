@@ -66,7 +66,7 @@ class CombatLog(BaseModel):
     def tree_to_dict(self, tree):
         """Contert OSCR's Tree class to a dictionary for easier use"""
         data = {"players": []}
-        keys = list(tree.data)
+        keys = list(tree)
 
         # Players
         players = tree.get_child(0)
