@@ -122,7 +122,7 @@ class CombatLog(BaseModel):
             combat = parser.combats[0]
         except IndexError:
             raise APIException('Combat log is empty')
-        damage_out = self.tree_to_dict(combat.damage_out)
+        damage_out = self.tree_to_dict(combat.damage_out._root)
 
         players = {}
         for name, player in combat.players.items():
