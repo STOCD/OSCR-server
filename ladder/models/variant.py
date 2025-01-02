@@ -27,5 +27,9 @@ class Variant(BaseNameModel):
         related_name="exclude_ground_variant_set",
     )
 
+    # Support for configurable combat time source and threshold.
+    combat_time_source = models.TextField(default="combat_time")
+    combat_time_threshold = models.FloatField(default=0.90)
+
     def __str__(self):
         return f"{self.name} ({self.start_date} to {self.end_date})"
