@@ -66,7 +66,7 @@ class CombatLog(BaseModel):
     def tree_to_dict(self, tree):
         """Contert OSCR's Tree class to a dictionary for easier use"""
         data = {"players": []}
-        keys = list(tree.data)
+        keys = list(tree)
 
         # Players
         players = tree.get_child(0)
@@ -110,17 +110,23 @@ class CombatLog(BaseModel):
 
         results = []
 
-        parser = OSCR.OSCR(file.name)
-        parser.analyze_log_file()
+        parser_settings = {
+            'combats_to_parse': 1,
+            'seconds_between_combats': 100,
+            'graph_resolution': 2.0,  # could probably use even greater resolution to save memory
+        }
 
-        # Only look at the first combat for now.
-        dmg_out, _, _, _ = parser.full_combat_analysis(0)
-        damage_out = self.tree_to_dict(dmg_out)
-        combat = parser.active_combat
+        parser = OSCR.OSCR(log_path=file.name, settings=parser_settings)
+        parser.analyze_log_file(max_combats=1)
+        try:
+            combat = parser.combats[0]
+        except IndexError:
+            raise APIException('Combat log is empty')
+        damage_out = self.tree_to_dict(combat.damage_out._root)
 
         players = {}
         for name, player in combat.players.items():
-            players[name] = player.__dict__
+            players[name] = player.to_dict()
 
         players = sorted(
             players.items(),
@@ -143,6 +149,9 @@ class CombatLog(BaseModel):
             raise APIException("Combat log is empty")
 
         # TBD: We use 0.9 combat time until a better choice can be made.
+        # +++ ADDED +++
+        # combat.meta['log_duration']
+        # combat.meta['player_duration']
         combat_time = players[0][1]["combat_time"] * 0.90
 
         # Check to see if map / difficulty combination exists in the ladder
