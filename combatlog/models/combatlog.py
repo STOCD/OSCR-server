@@ -138,7 +138,7 @@ class CombatLog(BaseModel):
         for idx, player in enumerate(players):
             handle = f"{player[1]['name']}{player[1]['handle']}"
             for damage_out_player in damage_out["players"]:
-                if damage_out_player["name"] == handle:
+                if damage_out_player["name"].startswith(handle):
                     # Override Build with damage breakdown
                     players[idx][1]["build"] = self.get_build(
                         damage_out_player["breakdown"]

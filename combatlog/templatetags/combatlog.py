@@ -35,12 +35,12 @@ def summary(instance):
 @register.simple_tag
 def damage_out_breakdown(instance, player, handle):
     """Get the player's Damage Out Table from the metadata by their name and handle"""
-    
+
     if instance.damage_out is None:
         return None
-    
+
     name = f"{player}{handle}"
     for table in instance.damage_out["players"]:
-        if table["name"] == name:
+        if table["name"].startswith(name):
             return table["breakdown"]
     return None
