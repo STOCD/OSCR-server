@@ -112,7 +112,7 @@ class CombatLog(BaseModel):
 
         parser_settings = {
             "combats_to_parse": 1,
-            "seconds_between_combats": 100,
+            "seconds_between_combats": 60,
             "graph_resolution": 2.0,  # could probably use even greater resolution to save memory
         }
 
