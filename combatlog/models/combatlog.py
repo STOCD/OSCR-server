@@ -111,9 +111,9 @@ class CombatLog(BaseModel):
         results = []
 
         parser_settings = {
-            'combats_to_parse': 1,
-            'seconds_between_combats': 100,
-            'graph_resolution': 2.0,  # could probably use even greater resolution to save memory
+            "combats_to_parse": 1,
+            "seconds_between_combats": 60,
+            "graph_resolution": 2.0,  # could probably use even greater resolution to save memory
         }
 
         parser = OSCR.OSCR(log_path=file.name, settings=parser_settings)
@@ -121,7 +121,7 @@ class CombatLog(BaseModel):
         try:
             combat = parser.combats[0]
         except IndexError:
-            raise APIException('Combat log is empty')
+            raise APIException("Combat log is empty")
         damage_out = self.tree_to_dict(combat.damage_out._root)
 
         players = {}
@@ -138,7 +138,7 @@ class CombatLog(BaseModel):
         for idx, player in enumerate(players):
             handle = f"{player[1]['name']}{player[1]['handle']}"
             for damage_out_player in damage_out["players"]:
-                if damage_out_player["name"] == handle:
+                if damage_out_player["name"].startswith(handle):
                     # Override Build with damage breakdown
                     players[idx][1]["build"] = self.get_build(
                         damage_out_player["breakdown"]
@@ -147,12 +147,6 @@ class CombatLog(BaseModel):
 
         if len(players) == 0:
             raise APIException("Combat log is empty")
-
-        # TBD: We use 0.9 combat time until a better choice can be made.
-        # +++ ADDED +++
-        # combat.meta['log_duration']
-        # combat.meta['player_duration']
-        combat_time = players[0][1]["combat_time"] * 0.90
 
         # Check to see if map / difficulty combination exists in the ladder
         # table. if it does, iterate over each player to see if they have a
@@ -202,19 +196,20 @@ class CombatLog(BaseModel):
 
         for _, player in players:
             full_name = f"{player['name']}{player['handle']}"
-            if player["combat_time"] < combat_time:
-                results.append(
-                    {
-                        "name": full_name,
-                        "updated": False,
-                        "detail": f"{full_name}'s combat time was too low.",
-                        "value": combat_time,
-                    }
-                )
-                continue
-
             for ladder in ladders:
                 if ladder.is_solo and len(players) != 1:
+                    continue
+
+                combat_time = ladder.combat_time_threshold(combat, players)
+                if player["combat_time"] < combat_time:
+                    results.append(
+                        {
+                            "name": full_name,
+                            "updated": False,
+                            "detail": f"{full_name}'s combat time was too low.",
+                            "value": combat_time,
+                        }
+                    )
                     continue
 
                 if (

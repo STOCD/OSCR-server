@@ -1,4 +1,4 @@
-""" Ladder Models """
+"""Ladder Models"""
 
 import logging
 
@@ -25,6 +25,21 @@ class Ladder(BaseModel):
     internal_difficulty = models.TextField(null=True, default=None)
 
     manual_review_threshold = models.IntegerField(default=0)
+
+    def combat_time_threshold(self, combat, players):
+        """Fetch the combat time threshold based on the ladder."""
+        # "combat_time" is special and falls back to the original / broken
+        # combat time calculation.
+        if self.variant.combat_time_source == "combat_time":
+            return players[0][1]["combat_time"] * self.variant.combat_time_threshold
+
+        # Current possible values:
+        # - log_duration
+        # - player_duration
+        return (
+            combat.meta[self.variant.combat_time_source]
+            * self.variant.combat_time_threshold
+        )
 
     def create_variant(self, variant):
         """Create variant of ladder"""
