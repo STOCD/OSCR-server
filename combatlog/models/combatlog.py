@@ -13,7 +13,7 @@ from django.utils import timezone
 from rest_framework.exceptions import APIException
 
 from core.models import BaseModel
-from ladder.models import Ladder, LadderEntry
+from ladder.models import BlockedHandle, Ladder, LadderEntry
 
 from .metadata import Metadata
 
@@ -207,6 +207,17 @@ class CombatLog(BaseModel):
                             "name": full_name,
                             "updated": False,
                             "detail": f"{full_name}'s combat time was too low.",
+                            "value": combat_time,
+                        }
+                    )
+                    continue
+
+                if BlockedHandle.objects.filter(handle=player["handle"]).count():
+                    results.append(
+                        {
+                            "name": full_name,
+                            "updated": False,
+                            "detail": f"{full_name} is banned from the ladder.",
                             "value": combat_time,
                         }
                     )
