@@ -4,12 +4,12 @@ from django.contrib import admin
 from django.db.models import JSONField
 from django_json_widget.widgets import JSONEditorWidget
 
-from .models import Ladder, LadderEntry, Variant
+from .models import BlockedHandle, Ladder, LadderEntry, Variant
 
 
 @admin.register(LadderEntry)
 class LadderEntryAdmin(admin.ModelAdmin):
-    exclude = [ "combatlog" ]
+    exclude = ["combatlog"]
     list_display = [
         "player",
         "ladder__name",
@@ -76,3 +76,8 @@ class LadderAdmin(admin.ModelAdmin):
 @admin.register(Variant)
 class VarientAdmin(admin.ModelAdmin):
     search_fields = []
+
+
+@admin.register(BlockedHandle)
+class BlockedHandle(admin.ModelAdmin):
+    search_fields = ["handle"]
