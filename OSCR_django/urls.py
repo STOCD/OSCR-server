@@ -36,6 +36,7 @@ urlpatterns = [
     path("", include("ladder.urls.ladder_entry")),
     path("", include("ladder.urls.variant")),
     path("", include("ui.urls.ui")),
+    path("", include("system.urls.update")),
 ]
 
 if settings.ADMIN_PATH:

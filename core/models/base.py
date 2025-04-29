@@ -1,4 +1,4 @@
-""" Base Model """
+"""Base Model"""
 
 from django.db import models
 
@@ -19,3 +19,4 @@ class BaseNameModel(models.Model):
 
     class Meta:
         abstract = True
+        get_latest_by = "pk"

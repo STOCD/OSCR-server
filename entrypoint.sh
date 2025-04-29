@@ -8,7 +8,8 @@ set -e
     python3 manage.py migrate --noinput
     python3 manage.py collectstatic --clear --noinput
 
-    # Load the ladder information.
+    # Load fixtures
+    python3 manage.py loaddata combatlog/fixtures/*.json
     python3 manage.py loaddata ladder/fixtures/*.json
 
     # Generate the ladder variants.

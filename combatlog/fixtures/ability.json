@@ -1,0 +1,18 @@
+[
+    {
+        "model": "combatlog.Ability",
+        "pk": 1,
+        "fields": {
+            "name": "Dilithium Detonator Charge",
+            "prohibited": true
+        }
+    },
+    {
+        "model": "combatlog.Ability",
+        "pk": 2,
+        "fields": {
+            "name": "Dilithium Destructor Charge",
+            "prohibited": true
+        }
+    }
+]

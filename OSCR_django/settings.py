@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "combatlog.apps.CombatLogConfig",
     "ladder.apps.LadderConfig",
     "ui.apps.UIConfig",
+    "system.apps.SystemConfig",
 ]
 
 MIDDLEWARE = [
