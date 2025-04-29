@@ -15,6 +15,7 @@ from rest_framework.exceptions import APIException
 from core.models import BaseModel
 from ladder.models import BlockedHandle, Ladder, LadderEntry
 
+from .ability import Ability
 from .metadata import Metadata
 
 LOGGER = logging.getLogger("django")
@@ -99,6 +100,19 @@ class CombatLog(BaseModel):
             return "Unknown"
         return damage_out[0]["name"]
 
+    def check_breakdown(self, damage_out):
+        """
+        Return the 'build' from the damage out entry.
+        This is a hack that will just return the top DPS ability.
+        """
+        if not len(damage_out):
+            return {"valid": True, "ability": ""}
+        for ability in damage_out:
+            for ab in Ability.objects.filter(prohibited=True):
+                if ab.name == ability["name"]:
+                    return {"valid": False, "ability": ab.name}
+        return {"valid": True, "ability": ""}
+
     def update_metadata_from_remote(self):
         """Updates Metadata from remote storage"""
         data = self.get_data()
@@ -135,12 +149,16 @@ class CombatLog(BaseModel):
         )
 
         # Add the damage out to the player.
+        valid_map = {}
         for idx, player in enumerate(players):
             handle = f"{player[1]['name']}{player[1]['handle']}"
             for damage_out_player in damage_out["players"]:
                 if damage_out_player["name"].startswith(handle):
                     # Override Build with damage breakdown
                     players[idx][1]["build"] = self.get_build(
+                        damage_out_player["breakdown"]
+                    )
+                    valid_map[handle] = self.check_breakdown(
                         damage_out_player["breakdown"]
                     )
                     break
@@ -190,14 +208,26 @@ class CombatLog(BaseModel):
 
         if len(ladders) == 0:
             raise APIException(
-                f"{combat.map} ({combat.difficulty} Difficulty) at {
-                    combat.start_time} has no matching ladder"
+                f"{combat.map} ({combat.difficulty} Difficulty) at {combat.start_time} has no matching ladder"
             )
 
         for _, player in players:
             full_name = f"{player['name']}{player['handle']}"
             for ladder in ladders:
                 if ladder.is_solo and len(players) != 1:
+                    continue
+
+                valid = valid_map.get(full_name, None)
+                print(valid)
+                if valid and not valid["valid"]:
+                    results.append(
+                        {
+                            "name": full_name,
+                            "updated": False,
+                            "detail": f"{valid['ability']} is a prohibited ability. Ladder entry will not be updated.",
+                            "value": player.get(ladder.metric),
+                        }
+                    )
                     continue
 
                 combat_time = ladder.combat_time_threshold(combat, players)
@@ -228,8 +258,7 @@ class CombatLog(BaseModel):
                     and player.get(ladder.metric) > ladder.manual_review_threshold
                 ):
                     visible = False
-                    manual_review = f", but result needs to be manually reviewed. Combat Log ID #{
-                        self.pk}"
+                    manual_review = f", but result needs to be manually reviewed. Combat Log ID #{self.pk}"
                 else:
                     visible = True
                     manual_review = ""

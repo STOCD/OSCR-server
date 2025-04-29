@@ -1,8 +1,9 @@
 with import <nixpkgs> { };
 
 let
-  pythonPackages = python311Packages;
-in pkgs.mkShell rec {
+  pythonPackages = python312Packages;
+in
+pkgs.mkShell rec {
   name = "impurePythonEnv";
   venvDir = "./.venv";
   buildInputs = [
@@ -32,6 +33,7 @@ in pkgs.mkShell rec {
   postVenvCreation = ''
     unset SOURCE_DATE_EPOCH
     pip install -r requirements.txt
+    pip install django-types django-stubs
   '';
 
   # Now we can execute any commands within the virtual environment.

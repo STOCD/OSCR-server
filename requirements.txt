@@ -1,13 +1,12 @@
-Django==4.2.9
-djangorestframework==3.14.0
-drf_yasg==1.21.7
-django_filter==23.5
+Django==5.1.7
+djangorestframework==3.16.0
+drf_yasg==1.21.10
+django_filter==25.1
 STO-OSCR>=2025.2.15.0
-whitenoise==6.6.0
-psycopg[binary,pool]==3.1.18
+whitenoise==6.9.0
+psycopg[binary,pool]==3.2.6
 requests>=2.31.0
 django-json-widget>=2.0.1
 
-# urllib3 needs to be pinned as newer versions don't work on vercel.
-# https://stackoverflow.com/questions/76187256/importerror-urllib3-v2-0-only-supports-openssl-1-1-1-currently-the-ssl-modu
-urllib3==1.26.7
+# NOTE: For Development:
+# django-stubs django-types

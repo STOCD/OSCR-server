@@ -6,7 +6,7 @@ from django_json_widget.widgets import JSONEditorWidget
 
 from ladder.models import LadderEntry
 
-from .models import CombatLog, Metadata
+from .models import Ability, CombatLog, Metadata
 
 
 class LadderEntryInline(admin.StackedInline):
@@ -28,3 +28,8 @@ class MetadataAdmin(admin.ModelAdmin):
 class CombatLogAdmin(admin.ModelAdmin):
     inlines = [LadderEntryInline]
     exclude = ["metadata"]
+
+
+@admin.register(Ability)
+class AbilityAdmin(admin.ModelAdmin):
+    exclude = []
