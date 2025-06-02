@@ -71,10 +71,24 @@
         "pk": "Season 33 - Unveiled",
         "fields": {
             "start_date": "2025-02-11T12:00:00+00:00",
-            "end_date": "2099-12-31T23:59:59+00:00",
+            "end_date": "2099-06-02T23:59:59+00:00",
             "is_ground_variant": true,
             "is_space_variant": true,
             "combat_time_source": "log_duration",
+            "combat_time_threshold": 0.85,
+            "exclude_space": [],
+            "exclude_ground": []
+        }
+    },
+    {
+        "model": "ladder.Variant",
+        "pk": "Season 34 - Heart of the Matter",
+        "fields": {
+            "start_date": "2025-02-11T12:00:00+00:00",
+            "end_date": "2099-06-02T23:59:59+00:00",
+            "is_ground_variant": true,
+            "is_space_variant": true,
+            "combat_time_source": "player_duration",
             "combat_time_threshold": 0.85,
             "exclude_space": [],
             "exclude_ground": []
