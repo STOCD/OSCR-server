@@ -82,7 +82,7 @@
     },
     {
         "model": "ladder.Variant",
-        "pk": "Season 34 - Heart of the Matter",
+        "pk": "2025 Spring Update - Heart of the Matter",
         "fields": {
             "start_date": "2025-06-03T12:00:00+00:00",
             "end_date": "2099-12-31T23:59:59+00:00",
