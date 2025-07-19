@@ -163,8 +163,6 @@ cython_debug/
 # Migrations are intentionally not included right now.
 
 # Generating the OpenAPI file and client
-api-spec.yaml
-client
 media
 staticfiles
 .vercel

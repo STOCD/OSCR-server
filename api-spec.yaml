@@ -1,0 +1,887 @@
+swagger: '2.0'
+info:
+  title: OSCR API
+  description: OSCR API
+  version: v1
+host: oscr.stobuilds.com
+schemes:
+- https
+basePath: /
+consumes:
+- application/json
+produces:
+- application/json
+securityDefinitions:
+  Basic:
+    type: basic
+security:
+- Basic: []
+paths:
+  /combatlog/:
+    get:
+      operationId: combatlog_list
+      description: Combat Log API
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      - name: page_size
+        in: query
+        description: Number of results to return per page.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/CombatLog'
+      tags:
+      - combatlog
+    parameters: []
+  /combatlog/upload/:
+    post:
+      operationId: combatlog_upload
+      summary: Combat Log Upload
+      description: Uploads a Combat Log for analysis.
+      parameters:
+      - name: file
+        in: formData
+        required: true
+        type: file
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CombatLogUploadResponse'
+      consumes:
+      - multipart/form-data
+      tags:
+      - combatlog
+    parameters: []
+  /combatlog/uploadv2/:
+    post:
+      operationId: combatlog_uploadv2
+      summary: Combat Log Upload
+      description: Uploads a Combat Log for analysis.
+      parameters:
+      - name: file
+        in: formData
+        required: true
+        type: file
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/CombatLogUploadV2Response'
+      consumes:
+      - multipart/form-data
+      tags:
+      - combatlog
+    parameters: []
+  /combatlog/{id}/:
+    get:
+      operationId: combatlog_read
+      description: Combat Log API
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/CombatLog'
+      tags:
+      - combatlog
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this combat log.
+      required: true
+      type: integer
+  /combatlog/{id}/download/:
+    get:
+      operationId: combatlog_download
+      summary: Combat Log Download
+      description: Download the saved Combat Log
+      parameters: []
+      responses:
+        '200':
+          description: File Attachment
+          schema:
+            type: file
+      tags:
+      - combatlog
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this combat log.
+      required: true
+      type: integer
+  /combatlog/{id}/download_raw/:
+    get:
+      operationId: combatlog_download_raw
+      summary: Combat Log Download
+      description: Download the saved Combat Log
+      parameters: []
+      responses:
+        '200':
+          description: File Attachment
+          schema:
+            type: file
+      tags:
+      - combatlog
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this combat log.
+      required: true
+      type: integer
+  /ladder-entries/:
+    get:
+      operationId: ladder-entries_list
+      description: LadderEntry API
+      parameters:
+      - name: player
+        in: query
+        description: player
+        required: false
+        type: string
+      - name: player__iexact
+        in: query
+        description: player__iexact
+        required: false
+        type: string
+      - name: player__contains
+        in: query
+        description: player__contains
+        required: false
+        type: string
+      - name: player__icontains
+        in: query
+        description: player__icontains
+        required: false
+        type: string
+      - name: player__istartswith
+        in: query
+        description: player__istartswith
+        required: false
+        type: string
+      - name: player__startswith
+        in: query
+        description: player__startswith
+        required: false
+        type: string
+      - name: player__endswith
+        in: query
+        description: player__endswith
+        required: false
+        type: string
+      - name: player__iendswith
+        in: query
+        description: player__iendswith
+        required: false
+        type: string
+      - name: player__iregex
+        in: query
+        description: player__iregex
+        required: false
+        type: string
+      - name: player__regex
+        in: query
+        description: player__regex
+        required: false
+        type: string
+      - name: ladder
+        in: query
+        description: ladder
+        required: false
+        type: string
+      - name: ladder__name
+        in: query
+        description: ladder__name
+        required: false
+        type: string
+      - name: ladder__name__iexact
+        in: query
+        description: ladder__name__iexact
+        required: false
+        type: string
+      - name: ladder__name__contains
+        in: query
+        description: ladder__name__contains
+        required: false
+        type: string
+      - name: ladder__name__icontains
+        in: query
+        description: ladder__name__icontains
+        required: false
+        type: string
+      - name: ladder__name__istartswith
+        in: query
+        description: ladder__name__istartswith
+        required: false
+        type: string
+      - name: ladder__name__startswith
+        in: query
+        description: ladder__name__startswith
+        required: false
+        type: string
+      - name: ladder__name__endswith
+        in: query
+        description: ladder__name__endswith
+        required: false
+        type: string
+      - name: ladder__name__iendswith
+        in: query
+        description: ladder__name__iendswith
+        required: false
+        type: string
+      - name: ladder__name__iregex
+        in: query
+        description: ladder__name__iregex
+        required: false
+        type: string
+      - name: ladder__name__regex
+        in: query
+        description: ladder__name__regex
+        required: false
+        type: string
+      - name: ladder__difficulty
+        in: query
+        description: ladder__difficulty
+        required: false
+        type: string
+      - name: ladder__difficulty__iexact
+        in: query
+        description: ladder__difficulty__iexact
+        required: false
+        type: string
+      - name: ladder__difficulty__contains
+        in: query
+        description: ladder__difficulty__contains
+        required: false
+        type: string
+      - name: ladder__difficulty__icontains
+        in: query
+        description: ladder__difficulty__icontains
+        required: false
+        type: string
+      - name: ladder__difficulty__istartswith
+        in: query
+        description: ladder__difficulty__istartswith
+        required: false
+        type: string
+      - name: ladder__difficulty__startswith
+        in: query
+        description: ladder__difficulty__startswith
+        required: false
+        type: string
+      - name: ladder__difficulty__endswith
+        in: query
+        description: ladder__difficulty__endswith
+        required: false
+        type: string
+      - name: ladder__difficulty__iendswith
+        in: query
+        description: ladder__difficulty__iendswith
+        required: false
+        type: string
+      - name: ladder__difficulty__iregex
+        in: query
+        description: ladder__difficulty__iregex
+        required: false
+        type: string
+      - name: ladder__difficulty__regex
+        in: query
+        description: ladder__difficulty__regex
+        required: false
+        type: string
+      - name: ladder__variant__name
+        in: query
+        description: ladder__variant__name
+        required: false
+        type: string
+      - name: ladder__variant__name__iexact
+        in: query
+        description: ladder__variant__name__iexact
+        required: false
+        type: string
+      - name: ladder__variant__name__contains
+        in: query
+        description: ladder__variant__name__contains
+        required: false
+        type: string
+      - name: ladder__variant__name__icontains
+        in: query
+        description: ladder__variant__name__icontains
+        required: false
+        type: string
+      - name: ladder__variant__name__istartswith
+        in: query
+        description: ladder__variant__name__istartswith
+        required: false
+        type: string
+      - name: ladder__variant__name__startswith
+        in: query
+        description: ladder__variant__name__startswith
+        required: false
+        type: string
+      - name: ladder__variant__name__endswith
+        in: query
+        description: ladder__variant__name__endswith
+        required: false
+        type: string
+      - name: ladder__variant__name__iendswith
+        in: query
+        description: ladder__variant__name__iendswith
+        required: false
+        type: string
+      - name: ladder__variant__name__iregex
+        in: query
+        description: ladder__variant__name__iregex
+        required: false
+        type: string
+      - name: ladder__variant__name__regex
+        in: query
+        description: ladder__variant__name__regex
+        required: false
+        type: string
+      - name: ladder__is_solo
+        in: query
+        description: ladder__is_solo
+        required: false
+        type: string
+      - name: ordering
+        in: query
+        description: Which field to use when ordering the results.
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      - name: page_size
+        in: query
+        description: Number of results to return per page.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/LadderEntry'
+      tags:
+      - ladder-entries
+    parameters: []
+  /ladder-entries/{id}/:
+    get:
+      operationId: ladder-entries_read
+      description: LadderEntry API
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/LadderEntry'
+      tags:
+      - ladder-entries
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this ladder entry.
+      required: true
+      type: integer
+  /ladder/:
+    get:
+      operationId: ladder_list
+      description: Ladder API
+      parameters:
+      - name: name
+        in: query
+        description: name
+        required: false
+        type: string
+      - name: difficulty
+        in: query
+        description: difficulty
+        required: false
+        type: string
+      - name: variant
+        in: query
+        description: variant
+        required: false
+        type: string
+      - name: is_solo
+        in: query
+        description: is_solo
+        required: false
+        type: string
+      - name: is_space
+        in: query
+        description: is_space
+        required: false
+        type: string
+      - name: metric
+        in: query
+        description: metric
+        required: false
+        type: string
+      - name: manual_review_threshold
+        in: query
+        description: manual_review_threshold
+        required: false
+        type: string
+      - name: ordering
+        in: query
+        description: Which field to use when ordering the results.
+        required: false
+        type: string
+      - name: search
+        in: query
+        description: A search term.
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      - name: page_size
+        in: query
+        description: Number of results to return per page.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Ladder'
+      tags:
+      - ladder
+    parameters: []
+  /ladder/{id}/:
+    get:
+      operationId: ladder_read
+      description: Ladder API
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Ladder'
+      tags:
+      - ladder
+    parameters:
+    - name: id
+      in: path
+      description: A unique integer value identifying this ladder.
+      required: true
+      type: integer
+  /system/latest/:
+    get:
+      operationId: system_latest
+      description: Fetch information about the latest update
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Update'
+      tags:
+      - system
+    parameters: []
+  /variant/:
+    get:
+      operationId: variant_list
+      description: Variant API
+      parameters:
+      - name: name
+        in: query
+        description: name
+        required: false
+        type: string
+      - name: start_date
+        in: query
+        description: start_date
+        required: false
+        type: string
+      - name: end_date
+        in: query
+        description: end_date
+        required: false
+        type: string
+      - name: is_ground_variant
+        in: query
+        description: is_ground_variant
+        required: false
+        type: string
+      - name: is_space_variant
+        in: query
+        description: is_space_variant
+        required: false
+        type: string
+      - name: exclude_space
+        in: query
+        description: exclude_space
+        required: false
+        type: string
+      - name: exclude_ground
+        in: query
+        description: exclude_ground
+        required: false
+        type: string
+      - name: combat_time_source
+        in: query
+        description: combat_time_source
+        required: false
+        type: string
+      - name: combat_time_threshold
+        in: query
+        description: combat_time_threshold
+        required: false
+        type: string
+      - name: ordering
+        in: query
+        description: Which field to use when ordering the results.
+        required: false
+        type: string
+      - name: search
+        in: query
+        description: A search term.
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      - name: page_size
+        in: query
+        description: Number of results to return per page.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Variant'
+      tags:
+      - variant
+    parameters: []
+  /variant/{name}/:
+    get:
+      operationId: variant_read
+      description: Variant API
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Variant'
+      tags:
+      - variant
+    parameters:
+    - name: name
+      in: path
+      description: A unique value identifying this variant.
+      required: true
+      type: string
+definitions:
+  Metadata:
+    required:
+    - map
+    - summary
+    type: object
+    properties:
+      id:
+        title: Id
+        type: integer
+        readOnly: true
+      map:
+        title: Map
+        type: string
+        minLength: 1
+      difficulty:
+        title: Difficulty
+        type: string
+        minLength: 1
+        x-nullable: true
+      summary:
+        title: Summary
+        type: object
+      date_time:
+        title: Date time
+        type: string
+        format: date-time
+        x-nullable: true
+  CombatLog:
+    required:
+    - metadata
+    type: object
+    properties:
+      id:
+        title: Id
+        type: integer
+        readOnly: true
+      metadata:
+        $ref: '#/definitions/Metadata'
+      youtube:
+        title: Youtube
+        type: string
+        minLength: 1
+        x-nullable: true
+  CombatLogUploadResponse:
+    required:
+    - name
+    - updated
+    - detail
+    - value
+    type: object
+    properties:
+      name:
+        title: Name
+        type: string
+        minLength: 1
+      updated:
+        title: Updated
+        type: boolean
+      detail:
+        title: Detail
+        type: string
+        minLength: 1
+      value:
+        title: Value
+        type: number
+  CombatLogUploadV2Response:
+    required:
+    - detail
+    type: object
+    properties:
+      results:
+        type: array
+        items:
+          $ref: '#/definitions/CombatLogUploadResponse'
+        x-nullable: true
+      combatlog:
+        title: Combatlog
+        type: integer
+        x-nullable: true
+      detail:
+        title: Detail
+        type: string
+        minLength: 1
+  LadderEntry:
+    required:
+    - player
+    - data
+    - combatlog
+    - ladder
+    type: object
+    properties:
+      id:
+        title: Id
+        type: integer
+        readOnly: true
+      date:
+        title: Date
+        type: string
+        readOnly: true
+      rank:
+        title: Rank
+        type: integer
+        readOnly: true
+      ladder_rank:
+        title: Ladder rank
+        type: integer
+        readOnly: true
+      player:
+        title: Player
+        type: string
+        minLength: 1
+      data:
+        title: Data
+        type: object
+      combatlog:
+        title: Combatlog
+        type: integer
+      ladder:
+        title: Ladder
+        type: integer
+  Ladder:
+    required:
+    - name
+    - metric
+    - variant
+    type: object
+    properties:
+      id:
+        title: Id
+        type: integer
+        readOnly: true
+      variant_name:
+        title: Variant name
+        type: string
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        minLength: 1
+      difficulty:
+        title: Difficulty
+        type: string
+        minLength: 1
+        x-nullable: true
+      is_solo:
+        title: Is solo
+        type: boolean
+      is_space:
+        title: Is space
+        type: boolean
+      metric:
+        title: Metric
+        type: string
+        minLength: 1
+      variant:
+        title: Variant
+        type: string
+  Update:
+    required:
+    - version
+    type: object
+    properties:
+      id:
+        title: Id
+        type: integer
+        readOnly: true
+      version:
+        title: Version
+        type: string
+        minLength: 1
+      url_appimage:
+        title: Url appimage
+        type: string
+      url_msi:
+        title: Url msi
+        type: string
+      notes:
+        title: Notes
+        type: string
+  Variant:
+    required:
+    - name
+    - start_date
+    - end_date
+    type: object
+    properties:
+      name:
+        title: Name
+        type: string
+        minLength: 1
+      start_date:
+        title: Start date
+        type: string
+        format: date-time
+      end_date:
+        title: End date
+        type: string
+        format: date-time
+      is_ground_variant:
+        title: Is ground variant
+        type: boolean
+      is_space_variant:
+        title: Is space variant
+        type: boolean
+      combat_time_source:
+        title: Combat time source
+        type: string
+        minLength: 1
+      combat_time_threshold:
+        title: Combat time threshold
+        type: number
+      exclude_space:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
+      exclude_ground:
+        type: array
+        items:
+          type: string
+        uniqueItems: true
