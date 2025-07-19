@@ -1,10 +1,12 @@
 # OSCR-server
+
 django backend for OSCR
 
 OSCR-server is a backend for [OSCR](https://github.com/STOCD/OSCR/tree/main) with the intent
 of recording combat log data.
 
 # Requirements
+
 see requirements.txt
 
 # Generating Ladders
@@ -19,7 +21,9 @@ python3 manage.py genladders
 This process happens automatically when running docker compose.
 
 # Running
+
 ## Development
+
 ```bash
 ENABLE_DEBUG=y python3 manage.py migrate
 ENABLE_DEBUG=y python3 manage.py runserver
@@ -52,7 +56,6 @@ python3 manage.py createsuperuser
 
 API Specs are packaged along with our releases.
 
-
 ```bash
 python3 manage.py generate_swagger -f yaml -u http://127.0.0.1 api-spec.yaml
 ```
@@ -63,7 +66,7 @@ python3 manage.py generate_swagger -f yaml -u http://127.0.0.1 api-spec.yaml
 
 ```bash
 openapi-generator-cli generate -g python -o client -i api-spec.yaml \
-    --additional-properties=packageName=OSCR_django_client,packageVersion=$(cat VERSION)
+    --additional-properties=packageName=OSCR_django_client,packageVersion=$(cat VERSION),poetry1=true
 cd client
 python3 -m build .
 python3 -m twine upload dist/*
