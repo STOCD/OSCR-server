@@ -22,7 +22,7 @@ jobs:
 
       - run: python3 -m pip install build
       - run: python3 -m build client
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: build_binary
           path: client/dist
