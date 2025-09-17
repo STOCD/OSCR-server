@@ -109,7 +109,7 @@ class CombatLog(BaseModel):
             return {"valid": True, "ability": ""}
         for ability in damage_out:
             for ab in Ability.objects.filter(prohibited=True):
-                if ab.name == ability["name"]:
+                if ab.name in ability["name"]:
                     return {"valid": False, "ability": ab.name}
         return {"valid": True, "ability": ""}
 
