@@ -220,3 +220,5 @@ USE_THOUSAND_SEPARATOR = True
 # Custom Paths
 ADMIN_PATH = os.environ.get("ADMIN_PATH", False)
 SWAGGER_PATH = os.environ.get("SWAGGER_PATH", False)
+
+CSRF_TRUSTED_ORIGINS = ["https://oscr.stobuilds.com"]
